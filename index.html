@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Knowledge Builder | Pro CRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* =========================================================
+           ADVANCED THEME ENGINE (LIGHT / DARK)
+           ========================================================= */
+        :root {
+            --primary: #4338ca; --primary-hover: #3730a3; --secondary: #06b6d4;
+            --success: #10b981; --danger: #f43f5e; --warning: #f59e0b; 
+            --pdf-red: #e11d48; --alumni-purple: #a855f7;
+            --radius-lg: 24px; --radius-md: 16px; --nav-height: 70px;
+
+            /* Light Theme Defaults */
+            --bg-app: #f1f5f9; 
+            --surface: #ffffff; 
+            --surface-hover: #f8fafc;
+            --surface-muted: #f8fafc;
+            --text-main: #0f172a; 
+            --text-muted: #64748b; 
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.05);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --progress-bg: #e2e8f0;
+            --ambient-glow: none;
+            --toast-bg: #0f172a; --toast-text: #ffffff;
+        }
+
+        body.dark-theme {
+            /* Premium Slate Dark Theme */
+            --bg-app: #020617; 
+            --surface: #0f172a; 
+            --surface-hover: #1e293b;
+            --surface-muted: #1e293b;
+            --text-main: #f8fafc; 
+            --text-muted: #94a3b8; 
+            --border: #1e293b;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+            --glass-bg: rgba(15, 23, 42, 0.85);
+            --progress-bg: #334155;
+            --ambient-glow: radial-gradient(circle at 50% 0%, rgba(67, 56, 202, 0.15), transparent 60%);
+            --toast-bg: #f8fafc; --toast-text: #0f172a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { background-color: var(--bg-app); color: var(--text-main); overflow-x: hidden; -webkit-font-smoothing: antialiased; transition: background-color 0.3s ease, color 0.3s ease; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--ambient-glow); pointer-events: none; z-index: -1; }
+
+        /* =========================================================
+           CORE COMPONENTS & ANIMATIONS
+           ========================================================= */
+        button, .btn, .nav-item, .archive-pill, .pay-opt, .quick-action-card, .custom-option { outline: none; -webkit-tap-highlight-color: transparent; }
+        
+        .btn { padding: 12px 20px; border-radius: 12px; font-weight: 600; cursor: pointer; border: none; transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; width: 100%; }
+        .btn:active { transform: scale(0.96) translateZ(0); }
+        
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(67, 56, 202, 0.2); }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-pdf { background: rgba(225, 29, 72, 0.1); color: var(--pdf-red); border: 1px solid rgba(225, 29, 72, 0.2); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
+        .btn-alumni { background: rgba(168, 85, 247, 0.1); color: var(--alumni-purple); border: 1px solid rgba(168, 85, 247, 0.2); }
+
+        .badge { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; border: 1px solid transparent; white-space: nowrap; }
+
+        /* =========================================================
+           LOGIN / AUTHENTICATION PAGE (SECURED)
+           ========================================================= */
+        #landing-page { position: fixed; inset: 0; z-index: 9999; background: var(--bg-app); display: flex; transition: opacity 0.6s ease, transform 0.6s ease; overflow: hidden; }
+        #landing-page.hidden { opacity: 0; transform: scale(1.05); pointer-events: none; }
+        
+        .auth-visual { flex: 1; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: none; flex-direction: column; justify-content: center; align-items: center; padding: 40px; position: relative; overflow: hidden; color: white; }
+        .auth-visual::before { content: ''; position: absolute; width: 150%; height: 150%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); top: -25%; left: -25%; animation: rotateGlow 20s linear infinite; }
+        @keyframes rotateGlow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .auth-visual-content { position: relative; z-index: 2; max-width: 400px; text-align: center; }
+        .auth-visual-content h1 { font-size: 42px; font-weight: 800; letter-spacing: -1px; margin-bottom: 16px; line-height: 1.1; }
+        .auth-visual-content p { font-size: 16px; opacity: 0.9; line-height: 1.6; }
+        .hero-logo-large { width: 90px; height: 90px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 24px; display: flex; justify-content: center; align-items: center; font-size: 40px; color: white; margin: 0 auto 30px; border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+
+        .floating-ui { position: absolute; background: rgba(255,255,255,0.15); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.2); padding: 12px 20px; border-radius: 100px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 10px; z-index: 2; box-shadow: 0 10px 30px rgba(0,0,0,0.1); animation: floatUI 6s infinite alternate ease-in-out; }
+        .floating-ui i { background: white; color: var(--primary); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+        .ui-1 { top: 20%; left: 10%; animation-delay: 0s; }
+        .ui-2 { bottom: 25%; right: 10%; animation-delay: -2s; }
+        .ui-3 { top: 50%; right: 5%; animation-delay: -4s; }
+        @keyframes floatUI { 0% { transform: translateY(0px); } 100% { transform: translateY(-20px); } }
+
+        .auth-panel { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; background: var(--bg-app); position: relative; z-index: 10; }
+        .login-card { width: 100%; max-width: 400px; background: var(--surface); padding: 40px 30px; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--border); text-align: center; }
+        
+        .mobile-only-logo { display: none; width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 16px; justify-content: center; align-items: center; font-size: 28px; color: white; margin: 0 auto 20px; box-shadow: 0 10px 25px rgba(67, 56, 202, 0.3); }
+        
+        .login-card h2 { font-size: 24px; color: var(--text-main); margin-bottom: 8px; font-weight: 800; letter-spacing: -0.5px;}
+        .login-card p { color: var(--text-muted); margin-bottom: 30px; font-size: 14px; }
+        
+        .auth-form { display: flex; flex-direction: column; gap: 16px; text-align: left; }
+        .auth-form label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .auth-form input { width: 100%; padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 15px; background: var(--surface-muted); color: var(--text-main); outline: none; transition: all 0.3s; }
+        .auth-form input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(67, 56, 202, 0.15); }
+        body.dark-theme .auth-form input { background: rgba(255,255,255,0.03); }
+
+        @media (min-width: 900px) {
+            .auth-visual { display: flex; }
+            .login-card { box-shadow: none; border: none; padding: 0; background: transparent; }
+        }
+        @media (max-width: 899px) {
+            .mobile-only-logo { display: flex; }
+        }
+
+        /* =========================================================
+           LAYOUT ARCHITECTURE
+           ========================================================= */
+        #app-container { display: flex; height: 100vh; opacity: 0; display: none; flex-direction: column; }
+        #app-container.visible { opacity: 1; display: flex; }
+
+        .top-header { background: var(--glass-bg); backdrop-filter: blur(16px); padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 30; transition: background-color 0.3s; }
+        .top-header h1 { font-size: 18px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; letter-spacing: -0.5px;}
+        
+        .main-content { flex: 1; overflow-y: auto; padding: 20px 16px; padding-bottom: calc(var(--nav-height) + 20px); }
+        .content-section { display: none; animation: fadeIn 0.3s ease-out forwards; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: var(--nav-height); background: var(--glass-bg); backdrop-filter: blur(16px); border-top: 1px solid var(--border); display: flex; z-index: 50; padding-bottom: env(safe-area-inset-bottom, 0px); transition: background-color 0.3s; }
+        .nav-item { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--text-muted); font-size: 10px; font-weight: 600; cursor: pointer; height: 100%; }
+        .nav-item i { font-size: 20px; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s; will-change: transform; }
+        .nav-item span { width: 100%; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 2px; }
+        .nav-item:active i { transform: scale(0.8) translateZ(0); }
+        .nav-item.active { color: var(--primary); }
+        .nav-item.active i { transform: translateY(-4px) scale(1.15) translateZ(0); color: var(--primary); }
+
+        .sidebar { display: none; width: 280px; background: var(--glass-bg); backdrop-filter: blur(16px); border-right: 1px solid var(--border); flex-direction: column; z-index: 40; transition: background-color 0.3s; }
+        .sidebar-logo { padding: 30px 24px; font-size: 20px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); margin-bottom: 20px; letter-spacing: -0.5px; }
+
+        /* =========================================================
+           DASHBOARD & NEW PREMIUM QUICK ACTION CARDS
+           ========================================================= */
+        .welcome-banner { background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: var(--radius-md); padding: 30px 24px; color: white; margin-bottom: 24px; box-shadow: 0 10px 25px rgba(67, 56, 202, 0.2); position: relative; overflow: hidden; }
+        .welcome-banner::after { content: ''; position: absolute; right: -20px; top: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.1); border-radius: 50%; pointer-events: none; }
+        .welcome-banner h2 { font-size: 24px; font-weight: 800; margin-bottom: 5px; position: relative; z-index: 2; letter-spacing: -0.5px;}
+        
+        .quick-actions-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+        
+        /* NEW STYLES: Premium Action Widgets */
+        .quick-action-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 20px 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 4px 6px rgba(0,0,0,0.02); position: relative; overflow: hidden; }
+        .quick-action-card:hover { border-color: var(--primary); box-shadow: 0 12px 20px -8px rgba(67, 56, 202, 0.25); transform: translateY(-4px); }
+        .quick-action-card:active { transform: scale(0.96) translateY(0); box-shadow: none; }
+        
+        .qa-icon-wrapper { width: 48px; height: 48px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 20px; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .quick-action-card:hover .qa-icon-wrapper { transform: scale(1.15) rotate(5deg); }
+        
+        .qa-text-container { text-align: center; }
+        .qa-title { font-weight: 800; color: var(--text-main); font-size: 14px; letter-spacing: -0.3px; margin-bottom: 2px; }
+        .qa-sub { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: var(--surface); padding: 24px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; gap: 12px; transition: background-color 0.3s; position: relative; overflow: hidden; }
+        .stat-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .stat-header h3 { color: var(--text-muted); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
+        .stat-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 18px; }
+        .stat-card p.value { font-size: 32px; font-weight: 800; color: var(--text-main); letter-spacing: -1px; line-height: 1;}
+        
+        .progress-wrapper { width: 100%; margin-top: 5px; }
+        .progress-bar { height: 6px; background: var(--progress-bg); border-radius: 10px; overflow: hidden; display: flex; }
+        .progress-fill { background: linear-gradient(90deg, var(--secondary), var(--primary)); height: 100%; border-radius: 10px; transition: width 1s ease-out; }
+        .progress-text { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-top: 8px; }
+
+        .panel { background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-md); border: 1px solid var(--border); overflow: hidden; margin-bottom: 24px; transition: background-color 0.3s; }
+        .panel-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
+        .panel-header h3 { font-size: 16px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .panel-actions { display: flex; gap: 10px; width: 100%; flex-wrap: wrap; align-items: center; }
+
+        /* =========================================================
+           TABLES & LISTS
+           ========================================================= */
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        table { width: 100%; border-collapse: collapse; min-width: 650px; }
+        th, td { padding: 16px 24px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; transition: background-color 0.3s; }
+        th { background: var(--surface-muted); color: var(--text-muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        td { font-weight: 500; }
+        .clickable-row:hover { background-color: var(--surface-hover); cursor: pointer; }
+        
+        .student-name-link { color: var(--text-main); font-weight: 700; text-decoration: none; font-size: 15px; display: block; }
+        .student-phone-sub { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-top: 2px; display: flex; align-items: center; gap: 4px; }
+        .avatar-circle { width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(67, 56, 202, 0.3); }
+        body.dark-theme .avatar-circle { background: linear-gradient(135deg, var(--primary), #3b82f6); }
+        
+        /* Floating Directory Styles */
+        .dir-table { border-collapse: separate; border-spacing: 0 8px; background: transparent; }
+        .dir-table th { border-bottom: none; padding-bottom: 4px; background: transparent; }
+        .dir-table tr.clickable-row { background: var(--surface); box-shadow: var(--shadow-sm); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 16px; }
+        .dir-table tr.clickable-row:hover { transform: translateY(-3px); box-shadow: 0 14px 20px -5px rgba(67, 56, 202, 0.1); background: var(--surface-hover); }
+        .dir-table td { border: none; padding: 16px 24px; }
+        .dir-table td:first-child { border-top-left-radius: 16px; border-bottom-left-radius: 16px; }
+        .dir-table td:last-child { border-top-right-radius: 16px; border-bottom-right-radius: 16px; }
+        .group-header td { background: transparent; color: var(--primary); font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; padding: 24px 24px 4px 24px; border: none; }
+
+        .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+        .dot-success { background: var(--success); box-shadow: 0 0 8px var(--success); }
+        .dot-primary { background: var(--primary); box-shadow: 0 0 8px var(--primary); }
+        .dot-danger { background: var(--danger); box-shadow: 0 0 8px var(--danger); animation: pulse-red 2s infinite; }
+        @keyframes pulse-red { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(244, 63, 94, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); } }
+
+        /* For Non-Directory Tables (Standard rows) */
+        .standard-table td { padding: 16px 24px; border-bottom: 1px solid var(--border); }
+        .standard-table tr:hover td { background: var(--surface-hover); }
+
+        /* Profile Header */
+        .profile-header { background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 30px 24px; border-radius: var(--radius-md); color: white; margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: 0 10px 25px rgba(67, 56, 202, 0.2); }
+        .profile-header h2 { font-size: 28px; font-weight: 800; margin-bottom: 5px; position: relative; z-index: 2; color: white; letter-spacing: -0.5px;}
+        .profile-header p { opacity: 0.9; font-weight: 500; font-size: 14px; position: relative; z-index: 2; color: white;}
+        .profile-badge { position: absolute; right: 24px; top: 30px; background: rgba(255,255,255,0.2); backdrop-filter: blur(5px); padding: 8px 16px; border-radius: 20px; font-weight: 700; border: 1px solid rgba(255,255,255,0.3); z-index: 2; color: white;}
+
+        /* --- Modals, Inputs & Custom Dropdowns --- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); display: none; align-items: flex-end; justify-content: center; z-index: 100; }
+        .modal-overlay.active { display: flex; animation: fadeInOverlay 0.2s ease; }
+        @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+        .modal { background: var(--surface); border: 1px solid var(--border); width: 100%; border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: 24px; padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s; max-height: 90vh; overflow-y: auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.2); }
+        .modal-overlay.active .modal { transform: translateY(0); }
+        .modal h2 { margin-bottom: 20px; font-weight: 800; color: var(--text-main); font-size: 20px; letter-spacing: -0.5px;}
+        
+        .form-group { margin-bottom: 16px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-group input, .form-group select { width: 100%; padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 15px; background: var(--surface-muted); color: var(--text-main); outline: none; transition: all 0.3s; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); background: var(--surface); box-shadow: 0 0 0 4px rgba(67, 56, 202, 0.15); }
+        body.dark-theme .form-group select option { background: var(--surface); color: var(--text-main); } 
+
+        .dir-search-container { position: relative; display: flex; align-items: center; flex: 2; min-width: 200px; }
+        .dir-search-container i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+        .dir-search-input { width: 100%; padding: 12px 14px 12px 40px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 14px; background: var(--surface-muted); color: var(--text-main); outline: none; transition: all 0.3s; }
+        .dir-search-input:focus { border-color: var(--primary); background: var(--surface); box-shadow: 0 0 0 4px rgba(67, 56, 202, 0.15); }
+        body.dark-theme .dir-search-input { background: rgba(255,255,255,0.03); }
+
+        /* SMART SEARCH DROPDOWN */
+        .custom-select-wrapper { position: relative; width: 100%; }
+        .custom-options-list { display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; max-height: 220px; overflow-y: auto; z-index: 1000; box-shadow: var(--shadow-md); padding: 8px; }
+        .custom-option { padding: 12px 16px; border-radius: 8px; cursor: pointer; transition: background-color 0.2s; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+        .custom-option:hover { background: var(--surface-hover); }
+        .custom-option .stu-name { font-weight: 700; color: var(--text-main); font-size: 14px;}
+        .custom-option .stu-batch { font-size: 11px; color: var(--text-muted); font-weight: 600; padding: 2px 8px; background: var(--surface-muted); border-radius: 4px; border: 1px solid var(--border); }
+        body.dark-theme .custom-options-list { background-color: #0f172a; border-color: #1e293b; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        body.dark-theme .custom-option { background-color: #0f172a; }
+        body.dark-theme .custom-option:hover { background-color: #1e293b; }
+        body.dark-theme .custom-option .stu-name { color: #f8fafc; }
+        body.dark-theme .custom-option .stu-batch { background-color: #1e293b; color: #94a3b8; border-color: #334155; }
+
+        /* QUICK AMOUNT CHIPS */
+        .quick-amt-row { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+        .quick-amt-chip { padding: 6px 12px; border-radius: 100px; background: var(--surface-muted); border: 1px solid var(--border); color: var(--text-main); font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; user-select: none;}
+        .quick-amt-chip:active { transform: scale(0.92); }
+        .quick-amt-chip.highlight { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.4); color: var(--success); }
+
+        /* PAYMENT MODE CARDS */
+        .pay-opt-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
+        .pay-opt { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 16px 10px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface-muted); color: var(--text-muted); cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); font-weight: 700; font-size: 13px; user-select: none; }
+        .pay-opt i { font-size: 24px; transition: transform 0.2s; }
+        .pay-opt:active { transform: scale(0.95); }
+        .pay-opt.active { border-color: var(--primary); background: rgba(67, 56, 202, 0.1); color: var(--primary); box-shadow: 0 4px 12px rgba(67, 56, 202, 0.15); }
+        .pay-opt.active i { transform: scale(1.1); }
+
+        /* INTERACTIVE ARCHIVE PILLS */
+        #arc-class-filters { display: flex; gap: 12px; margin-bottom: 20px; overflow-x: auto; padding: 4px; scrollbar-width: none; }
+        #arc-class-filters::-webkit-scrollbar { display: none; }
+        .archive-pill { padding: 10px 20px; border-radius: 100px; font-size: 13px; font-weight: 700; cursor: pointer; border: 1.5px solid var(--border); background: var(--surface); color: var(--text-muted); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); white-space: nowrap; box-shadow: var(--shadow-sm); user-select: none; }
+        .archive-pill:active { transform: scale(0.95); }
+        .archive-pill.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(67, 56, 202, 0.3); transform: translateY(0); }
+
+        #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 200; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; pointer-events: none; }
+        .toast { background: var(--toast-bg); color: var(--toast-text); padding: 14px 20px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 13px; transform: translateY(-100%); opacity: 0; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); border: 1px solid var(--border); }
+        .toast.show { transform: translateY(0); opacity: 1; }
+
+        @media (min-width: 768px) {
+            #app-container { flex-direction: row; }
+            .bottom-nav { display: none; }
+            .sidebar { display: flex; }
+            .main-content { padding: 32px; padding-bottom: 32px; }
+            .top-header { display: none; } 
+            
+            .panel-header { flex-direction: row; justify-content: space-between; align-items: center; padding: 24px; gap: 16px; }
+            /* Directory Header Stacking Fix */
+            .panel-header.directory-header { flex-direction: column !important; align-items: stretch !important; gap: 16px; }
+            .directory-header .top-row { display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; }
+            
+            .panel-actions { width: auto; flex-wrap: nowrap; flex: 1; justify-content: flex-end; }
+            .btn { width: auto; }
+            .modal-overlay { align-items: center; padding: 20px; }
+            .modal { max-width: 480px; border-radius: var(--radius-lg); transform: scale(0.95); }
+            .modal-overlay.active .modal { transform: scale(1); }
+            .sidebar-menu { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; }
+            .sidebar-item { padding: 14px 16px; border-radius: 12px; color: var(--text-muted); font-weight: 600; font-size: 15px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 14px; }
+            .sidebar-item:hover { background: var(--surface-hover); color: var(--text-main); }
+            .sidebar-item.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(67, 56, 202, 0.3); }
+        }
+
+        .upgrade-banner { background: linear-gradient(135deg, var(--warning), #ea580c); padding: 20px 24px; border-radius: var(--radius-md); color: white; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 24px; box-shadow: 0 10px 25px rgba(234, 88, 12, 0.2); }
+    </style>
+</head>
+<body>
+
+    <div id="landing-page">
+        <div class="auth-visual">
+            <div class="auth-visual-content">
+                <div class="hero-logo-large"><i class="fa-solid fa-book-open-reader"></i></div>
+                <h1>KNOWLEDGE BUILDER</h1>
+                <p>The ultimate CRM for modern institutes. Manage students, track fees, and analyze attendance in one fast, unified workspace.</p>
+            </div>
+            
+            <div class="floating-ui ui-1"><i class="fa-solid fa-check" style="color: var(--success);"></i> Attendance Synced</div>
+            <div class="floating-ui ui-2"><i class="fa-solid fa-indian-rupee-sign"></i> Fee Recorded</div>
+            <div class="floating-ui ui-3"><i class="fa-solid fa-chart-pie" style="color: var(--secondary);"></i> Revenue Up 12%</div>
+        </div>
+        
+        <div class="auth-panel">
+            <div class="login-card">
+                <div class="mobile-only-logo"><i class="fa-solid fa-book-open-reader"></i></div>
+                <h2 id="auth-title">Welcome Back, Admin</h2>
+                <p id="auth-subtitle">Secure Administrator Access</p>
+                
+                <form id="authForm" class="auth-form" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Admin Email</label>
+                        <input type="email" id="auth-email" required placeholder="admin@knowledgebuilder.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="auth-password" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" id="auth-submit-btn" class="btn btn-primary" style="margin-top: 10px; padding: 14px; font-size: 16px;">Secure Login</button>
+                </form>
+                
+                <div id="auth-error" style="color: var(--danger); font-size: 13px; margin-top: 15px; font-weight: 600; display: none; background: rgba(244, 63, 94, 0.1); padding: 10px; border-radius: 8px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-container">
+        
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fa-solid fa-book-open-reader" style="color: var(--primary);"></i> 
+                <span style="white-space: nowrap; font-size: 19px;">Knowledge Builder</span>
+            </div>
+            <div class="sidebar-menu">
+                <div class="sidebar-item active" data-target="dashboard" onclick="navigate('dashboard')"><i class="fa-solid fa-chart-pie"></i> Overview</div>
+                <div class="sidebar-item" data-target="students" onclick="navigate('students')"><i class="fa-solid fa-user-graduate"></i> Directory</div>
+                <div class="sidebar-item" data-target="attendance" onclick="navigate('attendance')"><i class="fa-solid fa-calendar-check"></i> Attendance</div>
+                <div class="sidebar-item" data-target="fees" onclick="navigate('fees')"><i class="fa-solid fa-wallet"></i> Financials</div>
+                <div class="sidebar-item" data-target="archives" onclick="navigate('archives')"><i class="fa-solid fa-box-archive"></i> History</div>
+            </div>
+            <div class="sidebar-menu" style="margin-top: auto; padding-bottom: 20px;">
+                <div class="sidebar-item" onclick="toggleTheme()"><i id="theme-icon-desktop" class="fa-solid fa-moon"></i> <span id="theme-text-desktop">Dark Mode</span></div>
+                <div class="sidebar-item" style="color: var(--danger);" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</div>
+            </div>
+        </div>
+
+        <div style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+            
+            <div class="top-header">
+                <h1><i class="fa-solid fa-book-open-reader" style="color: var(--primary);"></i> Knowledge Builder</h1>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button class="btn btn-outline" style="padding: 6px 10px; border-radius: 50%; border: none;" onclick="toggleTheme()"><i id="theme-icon-mobile" class="fa-solid fa-moon"></i></button>
+                    <button class="btn btn-outline" style="padding: 6px 10px; border-radius: 50%; border: none; color: var(--danger);" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+            </div>
+
+            <div class="main-content">
+                
+                <div id="dashboard" class="content-section active">
+                    
+                    <div id="upgrade-banner-container" style="display: none;">
+                        <div class="upgrade-banner">
+                            <div>
+                                <h3 style="color: white; font-size: 18px; margin-bottom: 5px;"><i class="fa-solid fa-bell"></i> Academic Year Rollover</h3>
+                                <p style="color: rgba(255,255,255,0.9); font-size: 14px; margin: 0;">It's time to automatically upgrade all active students to their next class.</p>
+                            </div>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <button class="btn" style="background: rgba(255,255,255,0.2); color: white; width: auto;" onclick="dismissUpgrade()">Not Now</button>
+                                <button class="btn" style="background: white; color: #ea580c; width: auto;" onclick="executeYearlyUpgrade()">Upgrade Students</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="welcome-banner">
+                        <h2 id="greeting-text">Good morning</h2>
+                        <p>Here is what's happening in your institute today.</p>
+                    </div>
+
+                    <div class="quick-actions-row">
+                        <div class="quick-action-card" onclick="navigate('students'); setTimeout(()=>openModal('studentModal'), 100)">
+                            <div class="qa-icon-wrapper" style="background: rgba(67, 56, 202, 0.1); color: var(--primary);">
+                                <i class="fa-solid fa-user-plus"></i>
+                            </div>
+                            <div class="qa-text-container">
+                                <div class="qa-title">Add Student</div>
+                                <div class="qa-sub">New admission</div>
+                            </div>
+                        </div>
+                        <div class="quick-action-card" onclick="navigate('fees'); setTimeout(()=>openModal('feeModal'), 100)">
+                            <div class="qa-icon-wrapper" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
+                                <i class="fa-solid fa-hand-holding-dollar"></i>
+                            </div>
+                            <div class="qa-text-container">
+                                <div class="qa-title">Record Fee</div>
+                                <div class="qa-sub">Collect payment</div>
+                            </div>
+                        </div>
+                        <div class="quick-action-card" onclick="navigate('attendance')">
+                            <div class="qa-icon-wrapper" style="background: rgba(6, 182, 212, 0.1); color: var(--secondary);">
+                                <i class="fa-solid fa-clipboard-user"></i>
+                            </div>
+                            <div class="qa-text-container">
+                                <div class="qa-title">Attendance</div>
+                                <div class="qa-sub">Mark registers</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <h3>Active Students</h3>
+                                <div class="stat-icon" style="background: rgba(67, 56, 202, 0.1); color: var(--primary);"><i class="fa-solid fa-users"></i></div>
+                            </div>
+                            <p class="value" id="dash-students">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <h3>Revenue Target</h3>
+                                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                            </div>
+                            <p class="value">₹<span id="dash-revenue">0</span></p>
+                            <div class="progress-wrapper">
+                                <div class="progress-bar"><div id="dash-progress" class="progress-fill" style="width: 0%;"></div></div>
+                                <div class="progress-text"><span id="dash-perc">0% Collected</span><span style="font-weight: 500;">Target: ₹<span id="dash-target">0</span></span></div>
+                            </div>
+                        </div>
+                        <div class="stat-card" style="border-left: 4px solid var(--danger);">
+                            <div class="stat-header">
+                                <h3>Pending Dues</h3>
+                                <div class="stat-icon" style="background: rgba(244, 63, 94, 0.1); color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                            </div>
+                            <p class="value" id="dash-pending" style="color: var(--danger);">₹0</p>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header" style="flex-direction: row;">
+                            <h3><i class="fa-brands fa-whatsapp" style="color: #25D366; font-size: 18px;"></i> Action Needed: Reminders</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="alertsTable" class="standard-table">
+                                <thead><tr><th>Student</th><th>Class</th><th>Pending</th><th>Action</th></tr></thead>
+                                <tbody id="alertsTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="students" class="content-section">
+                    
+                    <div id="active-directory-view">
+                        <div class="panel" style="background: transparent; box-shadow: none; border: none;">
+                            <div class="panel-header directory-header" style="background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--border); margin-bottom: 8px;">
+                                <div class="top-row">
+                                    <h3 id="directory-title">Active Directory</h3>
+                                    <div style="display: flex; gap: 8px;">
+                                        <button id="alumni-toggle-btn" class="btn btn-alumni" onclick="toggleDirectoryView()" style="width: auto; padding: 8px 14px;"><i class="fa-solid fa-clock-rotate-left"></i> Past Students</button>
+                                        <button class="btn btn-pdf" onclick="exportData('students')" style="width: auto; padding: 8px 14px;"><i class="fa-solid fa-file-pdf"></i> Export</button>
+                                    </div>
+                                </div>
+                                <div class="panel-actions" style="display: flex; gap: 10px; width: 100%; align-items: center; flex-wrap: wrap;">
+                                    <div class="dir-search-container">
+                                        <i class="fa-solid fa-search"></i>
+                                        <input type="text" id="dir-search" class="dir-search-input" placeholder="Search by name or number..." oninput="renderStudentsUI()">
+                                    </div>
+                                    <select id="filter-batch" class="form-group" style="margin:0; flex: 1; min-width: 130px; padding: 12px; border-radius: 12px;" onchange="renderStudentsUI()">
+                                        <option value="">All Classes</option>
+                                    </select>
+                                    <button class="btn btn-primary" onclick="openModal('studentModal')" style="flex: 1; min-width: 140px;"><i class="fa-solid fa-plus"></i> Add Student</button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive" style="padding: 0 4px;">
+                                <table class="dir-table">
+                                    <thead><tr><th>Student Info</th><th>Class</th><th>Financial Status</th><th></th></tr></thead>
+                                    <tbody id="studentTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="past-directory-view" style="display: none;">
+                        <button class="btn btn-outline" style="margin-bottom: 16px; width: auto;" onclick="toggleDirectoryView()"><i class="fa-solid fa-arrow-left"></i> Back to Active</button>
+                        
+                        <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                            <div class="stat-card" style="border-top: 3px solid var(--alumni-purple);">
+                                <div class="stat-header">
+                                    <h3>Total Pass Outs</h3>
+                                    <div class="stat-icon" style="background: rgba(168, 85, 247, 0.1); color: var(--alumni-purple);"><i class="fa-solid fa-graduation-cap"></i></div>
+                                </div>
+                                <p class="value" id="stat-alumni">0</p>
+                            </div>
+                            <div class="stat-card" style="border-top: 3px solid var(--danger);">
+                                <div class="stat-header">
+                                    <h3>Left Mid-Session</h3>
+                                    <div class="stat-icon" style="background: rgba(244, 63, 94, 0.1); color: var(--danger);"><i class="fa-solid fa-door-open"></i></div>
+                                </div>
+                                <p class="value" id="stat-left">0</p>
+                            </div>
+                            <div class="stat-card" style="border-top: 3px solid var(--success);">
+                                <div class="stat-header">
+                                    <h3>Lifetime Value (LTV)</h3>
+                                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);"><i class="fa-solid fa-vault"></i></div>
+                                </div>
+                                <p class="value">₹<span id="stat-ltv">0</span></p>
+                            </div>
+                        </div>
+
+                        <div class="panel" style="background: transparent; box-shadow: none; border: none;">
+                            <div class="panel-header directory-header" style="background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--border); margin-bottom: 8px;">
+                                <div class="top-row">
+                                    <h3>Past Students Ledger</h3>
+                                    <button class="btn btn-pdf" style="width: auto; padding: 8px 14px;" onclick="exportData('past_students')"><i class="fa-solid fa-file-pdf"></i> Export</button>
+                                </div>
+                                <div class="dir-search-container" style="width: 100%;">
+                                    <i class="fa-solid fa-search"></i>
+                                    <input type="text" id="past-search" class="dir-search-input" placeholder="Search past students..." oninput="renderStudentsUI()">
+                                </div>
+                            </div>
+                            <div class="table-responsive" style="padding: 0 4px;">
+                                <table class="dir-table">
+                                    <thead><tr><th>Student Info</th><th>Exit Status</th><th>Final LTV</th><th></th></tr></thead>
+                                    <tbody id="pastStudentTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="student-profile" class="content-section">
+                    <button class="btn btn-outline" style="margin-bottom: 16px; width: auto;" onclick="navigate('students')"><i class="fa-solid fa-arrow-left"></i> Close Profile</button>
+                    
+                    <div class="profile-header">
+                        <div class="profile-badge" id="sp-batch">Class 10</div>
+                        <h2 id="sp-name">Student Name</h2>
+                        <p><i class="fa-solid fa-phone" style="font-size: 12px; margin-right: 5px;"></i> <span id="sp-phone">Phone Number</span></p>
+                    </div>
+
+                    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                        <div class="stat-card" style="padding: 16px;"><h3 style="color: var(--text-muted); font-size: 12px; text-transform: uppercase;">Monthly Fee</h3><p class="value" style="font-size: 22px;">₹<span id="sp-monthly-fee">0</span></p></div>
+                        <div class="stat-card" style="padding: 16px;"><h3 style="color: var(--text-muted); font-size: 12px; text-transform: uppercase;">Total Paid</h3><p class="value" style="font-size: 22px; color: var(--success);">₹<span id="sp-total-paid">0</span></p></div>
+                        <div class="stat-card" style="padding: 16px;"><h3 style="color: var(--text-muted); font-size: 12px; text-transform: uppercase;">Balance</h3><p class="value" style="font-size: 22px;" id="sp-balance">0</p></div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap;">
+                        <button class="btn btn-pdf" style="flex: 1;" onclick="exportIndividualReport()"><i class="fa-solid fa-file-pdf"></i> Download Live Report</button>
+                        <button class="btn btn-outline" style="flex: 1;" onclick="openModal('editStudentModal')"><i class="fa-solid fa-pen"></i> Edit / Change Status</button>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header"><h3><i class="fa-solid fa-clock-rotate-left" style="color: var(--primary)"></i> Fee History</h3></div>
+                        <div class="table-responsive">
+                            <table class="standard-table"><thead><tr><th>Date</th><th>Amount Paid</th><th>Mode</th></tr></thead><tbody id="sp-feesBody"></tbody></table>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header"><h3><i class="fa-solid fa-calendar-check" style="color: var(--secondary)"></i> Attendance Record</h3></div>
+                        <div class="table-responsive">
+                            <table class="standard-table"><thead><tr><th>Date</th><th>Status</th></tr></thead><tbody id="sp-attBody"></tbody></table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="attendance" class="content-section">
+                    <div class="panel">
+                        <div class="panel-header" style="background: transparent; border-bottom: none;">
+                            <div style="display: flex; gap: 15px; width: 100%; flex-wrap: wrap;">
+                                <input type="date" id="att-date" class="form-group" style="margin:0; padding: 12px; border-radius: 12px; flex: 1;">
+                                <select id="att-batch" class="form-group" style="margin:0; padding: 12px; border-radius: 12px; flex: 2;" onchange="loadAttendanceList()">
+                                    <option value="">Select Class to mark...</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div id="att-actions-container" style="display: none; padding: 0 24px 20px 24px; border-bottom: 1px solid var(--border);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                                <div style="display: flex; gap: 15px;">
+                                    <div style="background: rgba(16, 185, 129, 0.1); padding: 8px 16px; border-radius: 8px; color: var(--success); font-weight: 700; font-size: 14px;"><i class="fa-solid fa-check"></i> <span id="att-count-present">0</span></div>
+                                    <div style="background: rgba(244, 63, 94, 0.1); padding: 8px 16px; border-radius: 8px; color: var(--danger); font-weight: 700; font-size: 14px;"><i class="fa-solid fa-xmark"></i> <span id="att-count-absent">0</span></div>
+                                </div>
+                                <button class="btn btn-primary" style="width: auto; background: var(--success); box-shadow: 0 4px 12px rgba(16,185,129,0.3);" onclick="markAllPresent()"><i class="fa-solid fa-check-double"></i> Mark All Present</button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="standard-table">
+                                <thead><tr><th>Student Name</th><th>Status</th><th>Action</th></tr></thead>
+                                <tbody id="attendanceTableBody">
+                                    <tr><td colspan="3" style="text-align:center; color: var(--text-muted); padding: 40px 10px;">Select date and class above.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="fees" class="content-section">
+                    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 16px;">
+                        <div class="stat-card" style="border-top: 3px solid var(--success);">
+                            <div class="stat-header">
+                                <h3>Today's Collection</h3>
+                                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);"><i class="fa-solid fa-calendar-day"></i></div>
+                            </div>
+                            <p class="value">₹<span id="fee-today-rev">0</span></p>
+                        </div>
+                        <div class="stat-card" style="border-top: 3px solid var(--primary);">
+                            <div class="stat-header">
+                                <h3>Month's Total</h3>
+                                <div class="stat-icon" style="background: rgba(67, 56, 202, 0.1); color: var(--primary);"><i class="fa-solid fa-calendar-days"></i></div>
+                            </div>
+                            <p class="value">₹<span id="fee-month-rev">0</span></p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap;">
+                        <div class="mini-stat" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px;">
+                            <span style="font-size: 13px; color: var(--text-muted); font-weight: 600;"><i class="fa-solid fa-money-bill"></i> Cash</span>
+                            <span style="font-weight: 800; color: var(--text-main); font-size: 16px;">₹<span id="split-cash">0</span></span>
+                        </div>
+                        <div class="mini-stat" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px;">
+                            <span style="font-size: 13px; color: var(--text-muted); font-weight: 600;"><i class="fa-solid fa-mobile-screen"></i> UPI</span>
+                            <span style="font-weight: 800; color: var(--text-main); font-size: 16px;">₹<span id="split-upi">0</span></span>
+                        </div>
+                        <div class="mini-stat" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px;">
+                            <span style="font-size: 13px; color: var(--text-muted); font-weight: 600;"><i class="fa-solid fa-building-columns"></i> Bank</span>
+                            <span style="font-weight: 800; color: var(--text-main); font-size: 16px;">₹<span id="split-bank">0</span></span>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3>Current Month Transactions</h3>
+                            <div class="panel-actions">
+                                <button class="btn btn-pdf" onclick="exportData('fees')" style="flex: 1;"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+                                <button class="btn btn-primary" style="background: var(--success); flex: 3; box-shadow: 0 4px 12px rgba(16,185,129,0.3);" onclick="openModal('feeModal')"><i class="fa-solid fa-indian-rupee-sign"></i> Record Payment</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="standard-table">
+                                <thead><tr><th>Date</th><th>Student</th><th>Amount</th><th>Mode</th></tr></thead>
+                                <tbody id="feeTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="archives" class="content-section">
+                    
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-box-archive" style="color: var(--secondary);"></i> Historical Analytics Dashboard</h3>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap; width: 100%; margin-top: 10px;">
+                                <select id="archive-select" class="form-group" style="margin:0; flex: 2; min-width: 180px; padding: 12px; border-radius: 10px;" onchange="loadArchiveData()">
+                                    <option value="">Select an archived month...</option>
+                                </select>
+                                <button class="btn btn-pdf" style="flex: 1; min-width: 150px;" onclick="downloadArchivePDF()"><i class="fa-solid fa-file-pdf"></i> Download Report</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="archive-content" style="display:none;">
+                        
+                        <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                            <div class="stat-card" style="border-top: 3px solid var(--success);">
+                                <div class="stat-header">
+                                    <h3>Revenue</h3>
+                                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);"><i class="fa-solid fa-vault"></i></div>
+                                </div>
+                                <p class="value">₹<span id="arc-total-rev">0</span></p>
+                            </div>
+                            <div class="stat-card" style="border-top: 3px solid var(--primary);">
+                                <div class="stat-header">
+                                    <h3>Transactions</h3>
+                                    <div class="stat-icon" style="background: rgba(67, 56, 202, 0.1); color: var(--primary);"><i class="fa-solid fa-hashtag"></i></div>
+                                </div>
+                                <p class="value" id="arc-total-trans">0</p>
+                            </div>
+                            <div class="stat-card" style="border-top: 3px solid var(--secondary);">
+                                <div class="stat-header">
+                                    <h3>Avg Attendance</h3>
+                                    <div class="stat-icon" style="background: rgba(6, 182, 212, 0.1); color: var(--secondary);"><i class="fa-solid fa-percent"></i></div>
+                                </div>
+                                <p class="value" id="arc-att-rate">0%</p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap;">
+                            <div class="mini-stat" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px;">
+                                <span style="font-size: 13px; color: var(--text-muted); font-weight: 600;"><i class="fa-solid fa-money-bill"></i> Cash</span>
+                                <span style="font-weight: 800; color: var(--text-main); font-size: 16px;">₹<span id="arc-split-cash">0</span></span>
+                            </div>
+                            <div class="mini-stat" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px;">
+                                <span style="font-size: 13px; color: var(--text-muted); font-weight: 600;"><i class="fa-solid fa-mobile-screen"></i> UPI</span>
+                                <span style="font-weight: 800; color: var(--text-main); font-size: 16px;">₹<span id="arc-split-upi">0</span></span>
+                            </div>
+                            <div class="mini-stat" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px;">
+                                <span style="font-size: 13px; color: var(--text-muted); font-weight: 600;"><i class="fa-solid fa-building-columns"></i> Bank</span>
+                                <span style="font-weight: 800; color: var(--text-main); font-size: 16px;">₹<span id="arc-split-bank">0</span></span>
+                            </div>
+                        </div>
+
+                        <div id="arc-class-filters"></div>
+
+                        <div class="panel">
+                            <div class="panel-header"><h3>Archived Fees <span id="arc-fee-badge" class="badge" style="background: rgba(67, 56, 202, 0.1); color: var(--primary);">All Classes</span></h3></div>
+                            <div class="table-responsive">
+                                <table class="standard-table">
+                                    <thead><tr><th>Date</th><th>Student</th><th>Amount</th><th>Mode</th></tr></thead>
+                                    <tbody id="arc-feesBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-header"><h3>Archived Attendance <span id="arc-att-badge" class="badge" style="background: rgba(67, 56, 202, 0.1); color: var(--primary);">All Classes</span></h3></div>
+                            <div class="table-responsive">
+                                <table class="standard-table">
+                                    <thead><tr><th>Date</th><th>Student Name</th><th>Status</th></tr></thead>
+                                    <tbody id="arc-attBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="panel" style="border: 1px solid rgba(244, 63, 94, 0.4);">
+                        <div class="panel-header" style="background: rgba(244, 63, 94, 0.05);">
+                            <h3><i class="fa-solid fa-triangle-exclamation" style="color: var(--danger);"></i> System Archive</h3>
+                        </div>
+                        <div style="padding: 20px;">
+                            <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 14px;">Use this at the end of the billing month. It captures a frozen snapshot of all current data to History, and zeroes out dues for active students to begin the new cycle.</p>
+                            <button class="btn btn-outline" style="width: 100%; color: var(--danger); border-color: var(--danger);" onclick="resetMonthlyFees()">Archive Data & Start New Month</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="bottom-nav">
+                <div class="nav-item active" data-target="dashboard" onclick="navigate('dashboard')"><i class="fa-solid fa-chart-pie"></i><span>Overview</span></div>
+                <div class="nav-item" data-target="students" onclick="navigate('students')"><i class="fa-solid fa-user-graduate"></i><span>Directory</span></div>
+                <div class="nav-item" data-target="attendance" onclick="navigate('attendance')"><i class="fa-solid fa-calendar-check"></i><span>Attendance</span></div>
+                <div class="nav-item" data-target="fees" onclick="navigate('fees')"><i class="fa-solid fa-wallet"></i><span>Financials</span></div>
+                <div class="nav-item" data-target="archives" onclick="navigate('archives')"><i class="fa-solid fa-box-archive"></i><span>History</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="studentModal" onclick="handleOverlayClick(event, 'studentModal')">
+        <div class="modal">
+            <div class="modal-drag-handle"></div>
+            <h2>Register Student</h2>
+            <form id="studentForm" onsubmit="saveStudent(event)">
+                <div class="form-group"><label>Full Name</label><input type="text" id="s-name" required placeholder="Student's name"></div>
+                <div class="form-group"><label>Standard / Class</label><select id="s-batch" required></select></div>
+                <div class="form-group"><label>Parent Contact (10 Digits)</label><input type="tel" id="s-phone" required pattern="[0-9]{10}" placeholder="9876543210"></div>
+                <div class="form-group"><label>Monthly Tuition Fee (₹)</label><input type="number" id="s-fee" required placeholder="E.g. 1500"></div>
+                <div style="display: flex; gap: 10px; margin-top: 24px;">
+                    <button type="button" class="btn btn-outline" style="flex: 1;" onclick="closeModal('studentModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 2;">Save Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="editStudentModal" onclick="handleOverlayClick(event, 'editStudentModal')">
+        <div class="modal">
+            <div class="modal-drag-handle"></div>
+            <h2>Edit Student Profile</h2>
+            <form id="editStudentForm" onsubmit="updateStudent(event)">
+                <div class="form-group"><label>Full Name</label><input type="text" id="e-name" required></div>
+                <div class="form-group">
+                    <label>Status / Class</label>
+                    <select id="e-batch" required></select>
+                </div>
+                <div class="form-group"><label>Parent Contact (10 Digits)</label><input type="tel" id="e-phone" required pattern="[0-9]{10}"></div>
+                <div class="form-group"><label>Monthly Tuition Fee (₹)</label><input type="number" id="e-fee" required></div>
+                <div style="display: flex; gap: 10px; margin-top: 24px;">
+                    <button type="button" class="btn btn-outline" style="flex: 1;" onclick="closeModal('editStudentModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 2;">Update Profile</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="feeModal" onclick="handleOverlayClick(event, 'feeModal')">
+        <div class="modal">
+            <div class="modal-drag-handle"></div>
+            <h2>Record Payment</h2>
+            <form id="feeForm" onsubmit="processFee(event)">
+                
+                <div class="form-group">
+                    <label>Select Active Student</label>
+                    <div class="custom-select-wrapper">
+                        <input type="text" id="f-student-search" class="dir-search-input" style="padding-left:16px;" placeholder="Type name to search..." oninput="filterFeeStudents()" onfocus="showFeeStudentList()" autocomplete="off">
+                        <div id="f-student-list" class="custom-options-list"></div>
+                        <input type="hidden" id="f-student" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Amount Received (₹)</label>
+                    <input type="number" id="f-amount" required placeholder="Enter amount">
+                    <div class="quick-amt-row">
+                        <div class="quick-amt-chip highlight" onclick="setQuickAmount('full', this)">Full Due</div>
+                        <div class="quick-amt-chip" onclick="setQuickAmount(500, this)">+ ₹500</div>
+                        <div class="quick-amt-chip" onclick="setQuickAmount(1000, this)">+ ₹1000</div>
+                        <div class="quick-amt-chip" onclick="setQuickAmount(1500, this)">+ ₹1500</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <div class="pay-opt-container">
+                        <div class="pay-opt active" onclick="setPaymentMode('Cash', this)"><i class="fa-solid fa-money-bill"></i> Cash</div>
+                        <div class="pay-opt" onclick="setPaymentMode('UPI', this)"><i class="fa-solid fa-mobile-screen"></i> UPI</div>
+                        <div class="pay-opt" onclick="setPaymentMode('Bank Transfer', this)"><i class="fa-solid fa-building-columns"></i> Bank</div>
+                    </div>
+                    <input type="hidden" id="f-mode" value="Cash">
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 24px;">
+                    <button type="button" class="btn btn-outline" style="flex: 1;" onclick="closeModal('feeModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 2; background: var(--success); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">Confirm Paid</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCifb7Uc3-uqRTCqi6iisxVuwuqPnzgdsU",
+            authDomain: "knowledge-builder-88ebe.firebaseapp.com",
+            databaseURL: "https://knowledge-builder-88ebe-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "knowledge-builder-88ebe",
+            storageBucket: "knowledge-builder-88ebe.firebasestorage.app",
+            messagingSenderId: "1087587899390",
+            appId: "1:1087587899390:web:6d174b0e8958822a2952af"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const cloudDB = firebase.firestore();
+        const auth = firebase.auth();
+        
+        // Secure Offline Persistence
+        cloudDB.enablePersistence().catch((err) => { console.log("Firebase Persistence Error:", err); });
+        
+        const classes = ["Class 1", "Class 2", "Class 3", "Class 4", "Class 5", "Class 6", "Class 7", "Class 8", "Class 9", "Class 10", "Alumni", "Left"];
+        
+        let liveStudents = []; let liveFees = []; let liveAttendance = {}; let liveArchives = [];
+        let currentViewedStudentId = null; let showingPastView = false; 
+        let studentsLoaded = false; let feesLoaded = false;
+
+        let localSettings = JSON.parse(localStorage.getItem('kb_settings')) || { lastUpgradedYear: 0, dismissedUpgradeYear: 0 };
+        let isDarkTheme = localStorage.getItem('kb_dark') === 'true';
+
+        // ACCURATE TIME GREETING
+        function setGreeting() {
+            const hour = new Date().getHours();
+            let greeting = "Good evening";
+            if (hour >= 0 && hour < 12) greeting = "Good morning";
+            else if (hour >= 12 && hour < 18) greeting = "Good afternoon";
+            
+            const el = document.getElementById('greeting-text');
+            if(el) el.innerText = `${greeting},.`;
+        }
+
+        window.onload = () => {
+            if(isDarkTheme) { document.body.classList.add('dark-theme'); updateThemeIcons(); }
+            
+            setGreeting();
+            document.getElementById('att-date').valueAsDate = new Date();
+            populateClassDropdowns();
+            
+            // UI Click Outside
+            document.addEventListener('click', function(e) {
+                if(!e.target.closest('.custom-select-wrapper')) {
+                    const list = document.getElementById('f-student-list');
+                    if(list) list.style.display = 'none';
+                }
+            });
+        };
+
+        // ==========================================
+        // SECURITY: AUTHENTICATION SYSTEM
+        // ==========================================
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('landing-page').classList.add('hidden');
+                document.getElementById('app-container').classList.add('visible');
+                setGreeting();
+                initAppData();
+            } else {
+                document.getElementById('landing-page').classList.remove('hidden');
+                document.getElementById('app-container').classList.remove('visible');
+            }
+        });
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-password').value;
+            const errDiv = document.getElementById('auth-error');
+            
+            auth.signInWithEmailAndPassword(email, pass)
+                .then(() => { errDiv.style.display = 'none'; })
+                .catch((error) => {
+                    errDiv.innerText = "Error: Invalid credentials or unauthorized access.";
+                    errDiv.style.display = 'block';
+                });
+        }
+
+        function handleLogout() {
+            if(confirm("Are you sure you want to lock the workspace and sign out?")) { auth.signOut(); }
+        }
+
+        function initAppData() {
+            listenToStudents(); listenToFees(); listenToAttendance(); listenToArchives();
+            checkYearlyUpgradeBanner(); 
+        }
+
+        // ==========================================
+        // THEME ENGINE
+        // ==========================================
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            isDarkTheme = document.body.classList.contains('dark-theme');
+            localStorage.setItem('kb_dark', isDarkTheme);
+            updateThemeIcons();
+        }
+
+        function updateThemeIcons() {
+            const iconM = document.getElementById('theme-icon-mobile'); const iconD = document.getElementById('theme-icon-desktop'); const textD = document.getElementById('theme-text-desktop');
+            if(isDarkTheme) {
+                if(iconM) iconM.classList.replace('fa-moon', 'fa-sun');
+                if(iconD) iconD.classList.replace('fa-moon', 'fa-sun');
+                if(textD) textD.innerText = "Light Mode";
+            } else {
+                if(iconM) iconM.classList.replace('fa-sun', 'fa-moon');
+                if(iconD) iconD.classList.replace('fa-sun', 'fa-moon');
+                if(textD) textD.innerText = "Dark Mode";
+            }
+        }
+
+        function sortStudents(studentArray) {
+            return [...studentArray].sort((a, b) => {
+                let numA = parseInt(a.batch.match(/\d+/)) || 999; let numB = parseInt(b.batch.match(/\d+/)) || 999;
+                if(numA !== numB) return numA - numB; return a.name.localeCompare(b.name); 
+            });
+        }
+
+        // ==========================================
+        // PRO UX: SMART PAYMENT FORM
+        // ==========================================
+        function setPaymentMode(mode, element) {
+            document.querySelectorAll('.pay-opt').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            document.getElementById('f-mode').value = mode;
+        }
+
+        function populateFeeDropdown() { 
+            let activeStus = sortStudents(liveStudents.filter(s => s.batch !== "Alumni" && s.batch !== "Left"));
+            let listHtml = "";
+            activeStus.forEach(s => {
+                let due = s.monthlyFee - s.totalPaid;
+                listHtml += `<div class="custom-option" onclick="selectFeeStudent('${s.id}', '${s.name.replace(/'/g, "\\'")}', ${due})">
+                    <span class="stu-name">${s.name}</span>
+                    <span class="stu-batch">${s.batch}</span>
+                </div>`;
+            });
+            document.getElementById('f-student-list').innerHTML = listHtml; 
+        }
+
+        function filterFeeStudents() {
+            let val = document.getElementById('f-student-search').value.toLowerCase();
+            let options = document.getElementById('f-student-list').children;
+            let hasVisible = false;
+            for(let opt of options) {
+                if(opt.innerText.toLowerCase().includes(val)) {
+                    opt.style.display = "flex"; hasVisible = true;
+                } else { opt.style.display = "none"; }
+            }
+            document.getElementById('f-student-list').style.display = hasVisible ? "block" : "none";
+        }
+
+        function showFeeStudentList() { document.getElementById('f-student-list').style.display = "block"; filterFeeStudents(); }
+
+        function selectFeeStudent(id, name, dueAmount) {
+            document.getElementById('f-student-search').value = name;
+            document.getElementById('f-student').value = id;
+            document.getElementById('f-student-list').style.display = "none";
+            
+            document.getElementById('f-amount').value = dueAmount > 0 ? dueAmount : '';
+            
+            document.querySelectorAll('.quick-amt-chip').forEach(c => c.classList.remove('highlight'));
+            document.querySelector('.quick-amt-chip').classList.add('highlight');
+        }
+
+        function setQuickAmount(val, element) {
+            document.querySelectorAll('.quick-amt-chip').forEach(c => c.classList.remove('highlight'));
+            element.classList.add('highlight');
+
+            const input = document.getElementById('f-amount');
+            if(val === 'full') {
+                const sId = document.getElementById('f-student').value;
+                if(!sId) return;
+                const s = liveStudents.find(st => st.id === sId);
+                if(s) { let due = s.monthlyFee - s.totalPaid; input.value = due > 0 ? due : ''; }
+            } else {
+                let currentVal = parseInt(input.value) || 0;
+                input.value = currentVal + val;
+            }
+        }
+
+        async function processFee(e) {
+            e.preventDefault(); 
+            const studentId = document.getElementById('f-student').value;
+            if(!studentId) { showToast('Please select a student from the list!', 'warning'); return; }
+            const studentName = document.getElementById('f-student-search').value; 
+            const amt = parseInt(document.getElementById('f-amount').value); const mode = document.getElementById('f-mode').value;
+            
+            const s = liveStudents.find(st => st.id === studentId);
+            const batchAtTimeOfPayment = s ? s.batch : "Unknown";
+
+            try { 
+                await cloudDB.collection("students").doc(studentId).update({ totalPaid: firebase.firestore.FieldValue.increment(amt) }); 
+                await cloudDB.collection("fees").add({ studentId: studentId, name: studentName, amount: amt, mode: mode, batch: batchAtTimeOfPayment, date: new Date().toLocaleDateString(), timestamp: new Date().toISOString() }); 
+                closeModal('feeModal'); document.getElementById('feeForm').reset(); document.getElementById('f-student').value=''; document.getElementById('f-student-search').value=''; document.querySelectorAll('.quick-amt-chip').forEach(c => c.classList.remove('highlight')); showToast(`₹${amt} recorded via ${mode}!`); 
+            } catch (error) { showToast('Error processing fee.', 'error'); }
+        }
+
+        // ==========================================
+        // SAFE AUTO UPGRADE
+        // ==========================================
+        function checkYearlyUpgradeBanner() {
+            const today = new Date(); let currentAcademicYear = today.getMonth() >= 3 ? today.getFullYear() : today.getFullYear() - 1;
+            if (localSettings.lastUpgradedYear < currentAcademicYear && localSettings.dismissedUpgradeYear !== currentAcademicYear && today.getMonth() >= 3) { document.getElementById('upgrade-banner-container').style.display = 'block'; } else { document.getElementById('upgrade-banner-container').style.display = 'none'; }
+        }
+
+        function dismissUpgrade() {
+            const today = new Date(); let currentAcademicYear = today.getMonth() >= 3 ? today.getFullYear() : today.getFullYear() - 1;
+            localSettings.dismissedUpgradeYear = currentAcademicYear; localStorage.setItem('kb_settings', JSON.stringify(localSettings));
+            document.getElementById('upgrade-banner-container').style.display = 'none';
+        }
+
+        async function executeYearlyUpgrade() {
+            if(confirm("Are you sure you want to upgrade all ACTIVE students to their next class?")) {
+                showToast("Upgrading... please wait.", "warning");
+                let batchPromises = [];
+                liveStudents.forEach((s) => {
+                    if(s.batch !== "Alumni" && s.batch !== "Left") {
+                        let currentClassNum = parseInt(s.batch.match(/\d+/));
+                        if (currentClassNum) { let newBatch = currentClassNum < 10 ? `Class ${currentClassNum + 1}` : "Alumni"; batchPromises.push(cloudDB.collection("students").doc(s.id).update({ batch: newBatch })); }
+                    }
+                });
+                try {
+                    await Promise.all(batchPromises);
+                    const today = new Date(); let currentAcademicYear = today.getMonth() >= 3 ? today.getFullYear() : today.getFullYear() - 1;
+                    localSettings.lastUpgradedYear = currentAcademicYear; localStorage.setItem('kb_settings', JSON.stringify(localSettings));
+                    document.getElementById('upgrade-banner-container').style.display = 'none';
+                    showToast("All students upgraded!", "success");
+                } catch(e) { showToast("Error upgrading students", "error"); }
+            }
+        }
+
+        // ==========================================
+        // STUDENT DIRECTORY
+        // ==========================================
+        async function saveStudent(e) { e.preventDefault(); const newStudent = { name: document.getElementById('s-name').value, batch: document.getElementById('s-batch').value, phone: document.getElementById('s-phone').value, monthlyFee: parseInt(document.getElementById('s-fee').value), totalPaid: 0, timestamp: new Date().toISOString() }; try { await cloudDB.collection("students").add(newStudent); closeModal('studentModal'); document.getElementById('studentForm').reset(); showToast('Profile Created!'); } catch (error) { showToast('Error syncing.', 'error'); } }
+
+        async function updateStudent(e) {
+            e.preventDefault(); if(!currentViewedStudentId) return;
+            const updatedData = { name: document.getElementById('e-name').value, batch: document.getElementById('e-batch').value, phone: document.getElementById('e-phone').value, monthlyFee: parseInt(document.getElementById('e-fee').value) };
+            try { await cloudDB.collection("students").doc(currentViewedStudentId).update(updatedData); closeModal('editStudentModal'); showToast('Profile Updated!'); } catch (error) { showToast('Error updating.', 'error'); }
+        }
+
+        function listenToStudents() {
+            cloudDB.collection("students").onSnapshot((snapshot) => {
+                liveStudents = []; snapshot.forEach((doc) => { liveStudents.push({ id: doc.id, ...doc.data() }); });
+                studentsLoaded = true;
+                renderStudentsUI(); 
+                if(document.getElementById('feeModal').classList.contains('active')) populateFeeDropdown();
+                if(currentViewedStudentId) viewStudentProfile(currentViewedStudentId);
+                
+                if(feesLoaded) { updateDashboard(); renderFinancialsUI(); }
+            });
+        }
+
+        function toggleDirectoryView() {
+            showingPastView = !showingPastView;
+            if(showingPastView) { document.getElementById('active-directory-view').style.display = 'none'; document.getElementById('past-directory-view').style.display = 'block'; } 
+            else { document.getElementById('active-directory-view').style.display = 'block'; document.getElementById('past-directory-view').style.display = 'none'; }
+            renderStudentsUI();
+        }
+
+        function renderStudentsUI() {
+            let activeHtml = ""; let pastHtml = "";
+            let searchTermActive = document.getElementById('dir-search') ? document.getElementById('dir-search').value.toLowerCase() : '';
+            let searchTermPast = document.getElementById('past-search') ? document.getElementById('past-search').value.toLowerCase() : '';
+            
+            // ACTIVE DIRECTORY
+            let activeList = liveStudents.filter(s => s.batch !== "Alumni" && s.batch !== "Left");
+            const filterBatch = document.getElementById('filter-batch').value;
+            if(filterBatch) { activeList = activeList.filter(s => s.batch === filterBatch); }
+            if(searchTermActive) { activeList = activeList.filter(s => s.name.toLowerCase().includes(searchTermActive) || s.phone.includes(searchTermActive)); }
+            
+            activeList = sortStudents(activeList);
+
+            if(activeList.length === 0) { 
+                activeHtml = `<tr><td colspan="4" style="text-align:center; padding: 40px 20px; color: var(--text-muted); border: none;"><i class="fa-solid fa-folder-open" style="font-size: 32px; opacity: 0.5; margin-bottom: 10px; display: block;"></i>No active students found.</td></tr>`; 
+            } else {
+                let currentBatch = "";
+                activeList.forEach((s) => {
+                    if (s.batch !== currentBatch) {
+                        currentBatch = s.batch;
+                        activeHtml += `<tr class="group-header"><td colspan="4" style="border-radius: 12px; background: transparent; padding-top: 24px; padding-bottom: 4px; border: none; color: var(--text-muted);"><i class="fa-solid fa-users-rectangle" style="margin-right: 6px;"></i> ${currentBatch}</td></tr>`;
+                    }
+
+                    let balance = s.totalPaid - s.monthlyFee; let statusHtml = "";
+                    if (balance === 0) { 
+                        statusHtml = `<span class="badge" style="background:rgba(16, 185, 129, 0.1); color:var(--success);"><span class="status-dot dot-success"></span> Paid</span>`; 
+                    } else if (balance < 0) { 
+                        statusHtml = `<span class="badge" style="background:rgba(244, 63, 94, 0.1); color:var(--danger);"><span class="status-dot dot-danger"></span> Due: ₹${Math.abs(balance)}</span>`; 
+                    } else { 
+                        statusHtml = `<span class="badge" style="background:rgba(67, 56, 202, 0.1); color:var(--primary);"><span class="status-dot dot-primary"></span> Adv: ₹${balance}</span>`; 
+                    }
+                    
+                    let initial = s.name.charAt(0).toUpperCase();
+
+                    activeHtml += `<tr class="clickable-row">
+                        <td onclick="viewStudentProfile('${s.id}')">
+                            <div style="display: flex; align-items: center; gap: 14px;">
+                                <div class="avatar-circle">${initial}</div>
+                                <div>
+                                    <div class="student-name-link">${s.name}</div>
+                                    <div class="student-phone-sub"><i class="fa-brands fa-whatsapp" style="color: #25D366; font-size: 11px;"></i> ${s.phone}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td onclick="viewStudentProfile('${s.id}')"><span class="badge" style="background:transparent; color:var(--text-muted); border: 1px solid var(--border);"><i class="fa-solid fa-layer-group" style="opacity:0.5;"></i> ${s.batch}</span></td>
+                        <td onclick="viewStudentProfile('${s.id}')">${statusHtml}</td>
+                        <td><button class="btn" style="background: rgba(244, 63, 94, 0.1); color: var(--danger); padding: 8px; width: 36px; height: 36px; border-radius: 10px;" onclick="deleteStudent('${s.id}')" title="Delete"><i class="fa-solid fa-trash-can"></i></button></td>
+                    </tr>`;
+                });
+            }
+            document.getElementById('studentTableBody').innerHTML = activeHtml;
+
+            // PAST DIRECTORY
+            let pastList = liveStudents.filter(s => s.batch === "Alumni" || s.batch === "Left");
+            let alumniCount = 0; let leftCount = 0; let lifetimeValue = 0;
+            if(searchTermPast) { pastList = pastList.filter(s => s.name.toLowerCase().includes(searchTermPast) || s.phone.includes(searchTermPast)); }
+            pastList = sortStudents(pastList);
+
+            if(pastList.length === 0) { 
+                pastHtml = `<tr><td colspan="4" style="text-align:center; padding: 40px 20px; color: var(--text-muted); border: none;"><i class="fa-solid fa-folder-open" style="font-size: 32px; opacity: 0.5; margin-bottom: 10px; display: block;"></i>No past students found.</td></tr>`; 
+            } else {
+                pastList.forEach((s) => {
+                    if(s.batch === "Alumni") alumniCount++; if(s.batch === "Left") leftCount++;
+                    lifetimeValue += s.totalPaid; 
+                    
+                    let statusHtml = s.batch === "Alumni" ? `<span class="badge" style="background:rgba(168, 85, 247, 0.1); color:var(--alumni-purple); border: 1px solid rgba(168, 85, 247, 0.2);"><i class="fa-solid fa-graduation-cap"></i> Pass Out</span>` : `<span class="badge" style="background:rgba(244, 63, 94, 0.1); color:var(--danger); border: 1px solid rgba(244, 63, 94, 0.2);"><i class="fa-solid fa-door-open"></i> Left Session</span>`;
+                    let initial = s.name.charAt(0).toUpperCase();
+
+                    pastHtml += `<tr class="clickable-row">
+                        <td onclick="viewStudentProfile('${s.id}')">
+                            <div style="display: flex; align-items: center; gap: 14px;">
+                                <div class="avatar-circle" style="background: var(--surface-muted); color: var(--text-muted); box-shadow: none; border: 1px solid var(--border);">${initial}</div>
+                                <div>
+                                    <div class="student-name-link" style="color: var(--text-main);">${s.name}</div>
+                                    <div class="student-phone-sub"><i class="fa-solid fa-phone" style="font-size: 9px;"></i> ${s.phone}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td onclick="viewStudentProfile('${s.id}')">${statusHtml}</td>
+                        <td onclick="viewStudentProfile('${s.id}')" style="font-weight: 700; color: var(--success);">₹${s.totalPaid}</td>
+                        <td><button class="btn" style="background: rgba(244, 63, 94, 0.1); color: var(--danger); padding: 8px; width: 36px; height: 36px; border-radius: 10px;" onclick="deleteStudent('${s.id}')" title="Delete"><i class="fa-solid fa-trash-can"></i></button></td>
+                    </tr>`;
+                });
+            }
+            document.getElementById('pastStudentTableBody').innerHTML = pastHtml;
+            document.getElementById('stat-alumni').innerText = alumniCount; document.getElementById('stat-left').innerText = leftCount; document.getElementById('stat-ltv').innerText = lifetimeValue;
+        }
+
+        function viewStudentProfile(studentId) {
+            currentViewedStudentId = studentId; const student = liveStudents.find(s => s.id === studentId); if(!student) return;
+            document.getElementById('sp-name').innerText = student.name; document.getElementById('sp-batch').innerText = student.batch === 'Alumni' ? 'Pass Out' : student.batch; document.getElementById('sp-phone').innerText = student.phone; document.getElementById('sp-monthly-fee').innerText = student.monthlyFee; document.getElementById('sp-total-paid').innerText = student.totalPaid;
+            document.getElementById('e-name').value = student.name; document.getElementById('e-batch').value = student.batch; document.getElementById('e-phone').value = student.phone; document.getElementById('e-fee').value = student.monthlyFee;
+            let balance = student.totalPaid - student.monthlyFee; let balEl = document.getElementById('sp-balance');
+            
+            if (student.batch === "Alumni") { balEl.innerHTML = `<span style="color:var(--alumni-purple); font-size: 16px;">Pass Out (Archived)</span>`; }
+            else if (student.batch === "Left") { balEl.innerHTML = `<span style="color:var(--danger); font-size: 16px;">Left Session</span>`; }
+            else if (balance === 0) { balEl.innerHTML = `<span style="color:var(--success);">Fully Paid</span>`; } 
+            else if (balance < 0) { balEl.innerHTML = `<span style="color:var(--danger);">Due: ₹${Math.abs(balance)}</span>`; } 
+            else { balEl.innerHTML = `<span style="color:var(--primary);">Advance: ₹${balance}</span>`; }
+
+            let studentFees = liveFees.filter(f => f.studentId === studentId); let feeHtml = studentFees.length === 0 ? `<tr><td colspan="3" style="text-align:center; padding: 20px; border:none;">No fees found.</td></tr>` : '';
+            studentFees.forEach(f => { let icon = f.mode === 'UPI' ? 'mobile-screen' : (f.mode === 'Bank Transfer' ? 'building-columns' : 'money-bill'); feeHtml += `<tr class="standard-table"><td>${f.date}</td><td style="color: var(--success); font-weight: 800;">+₹${f.amount}</td><td><span class="badge" style="background:var(--surface-muted); border: 1px solid var(--border); color:var(--text-main);"><i class="fa-solid fa-${icon}"></i> ${f.mode || 'Cash'}</span></td></tr>`; });
+            document.getElementById('sp-feesBody').innerHTML = feeHtml;
+
+            let attHtml = ''; let attCount = 0; Object.keys(liveAttendance).sort((a,b) => new Date(b) - new Date(a)).forEach(date => { if(liveAttendance[date][studentId]) { attCount++; const status = liveAttendance[date][studentId]; const isP = status === 'Present'; attHtml += `<tr class="standard-table"><td style="font-weight: 600;">${date}</td><td><span class="badge" style="background:${isP?'rgba(16, 185, 129, 0.1)':'rgba(244, 63, 94, 0.1)'}; color:${isP?'var(--success)':'var(--danger)'}; border: 1px solid ${isP?'rgba(16, 185, 129, 0.3)':'rgba(244, 63, 94, 0.3)'}">${status}</span></td></tr>`; } });
+            if(attCount === 0) attHtml = `<tr><td colspan="2" style="text-align:center; padding: 20px; border:none;">No attendance found.</td></tr>`; document.getElementById('sp-attBody').innerHTML = attHtml;
+            document.querySelectorAll('.content-section').forEach(e => e.classList.remove('active')); document.getElementById('student-profile').classList.add('active'); window.scrollTo(0, 0);
+        }
+
+        async function deleteStudent(id) { if(confirm('Remove student permanently?')) { await cloudDB.collection("students").doc(id).delete(); showToast('Student deleted.'); } }
+
+        // ==========================================
+        // FINANCIALS & DASHBOARD SYNC 
+        // ==========================================
+        function listenToFees() {
+            cloudDB.collection("fees").onSnapshot((snapshot) => {
+                liveFees = []; snapshot.forEach((doc) => { liveFees.push({id: doc.id, ...doc.data()}); });
+                liveFees.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+                feesLoaded = true;
+                
+                if(studentsLoaded) { updateDashboard(); renderFinancialsUI(); }
+                if(currentViewedStudentId) viewStudentProfile(currentViewedStudentId);
+            });
+        }
+
+        function updateDashboard() {
+            let activeStudents = liveStudents.filter(s => s.batch !== "Alumni" && s.batch !== "Left");
+            document.getElementById('dash-students').innerText = activeStudents.length;
+            let expectedRev = 0; let totalDues = 0; let alerts = '';
+            
+            sortStudents(activeStudents).forEach(s => {
+                expectedRev += s.monthlyFee; let due = s.monthlyFee - s.totalPaid;
+                if(due > 0) { totalDues += due; alerts += `<tr class="standard-table"><td style="color: var(--text-main); font-weight: 700;">${s.name}</td><td><span class="badge" style="background:var(--surface-muted); border: 1px solid var(--border); color:var(--text-muted);">${s.batch}</span></td><td style="color: var(--danger); font-weight: 800;">₹${due}</td><td><button class="btn btn-whatsapp" onclick="sendWhatsApp('${s.phone}', '${s.name}', ${due})"><i class="fa-brands fa-whatsapp"></i> Remind</button></td></tr>`; }
+            });
+            
+            let todayStr = new Date().toLocaleDateString(); let todayRev = 0; let monthRev = 0;
+            let cashTot = 0; let upiTot = 0; let bankTot = 0;
+            
+            liveFees.forEach(f => {
+                monthRev += f.amount; if(f.date === todayStr) todayRev += f.amount;
+                if(f.mode === 'Cash') cashTot += f.amount; else if(f.mode === 'UPI') upiTot += f.amount; else if(f.mode === 'Bank Transfer') bankTot += f.amount; else cashTot += f.amount;
+            });
+            
+            document.getElementById('dash-revenue').innerText = monthRev; 
+            document.getElementById('dash-pending').innerText = "₹" + totalDues; 
+            document.getElementById('alertsTableBody').innerHTML = alerts || `<tr><td colspan="4" style="text-align:center; padding:40px 20px; color: var(--success); font-weight: 600; border: none;"><i class="fa-solid fa-check-circle" style="font-size: 32px; opacity: 0.5; margin-bottom: 10px; display: block;"></i>All active fees collected!</td></tr>`;
+            
+            let perc = expectedRev === 0 ? 0 : Math.min(100, Math.round((monthRev / expectedRev) * 100));
+            document.getElementById('dash-progress').style.width = `${perc}%`; document.getElementById('dash-perc').innerText = `${perc}% Collected`; document.getElementById('dash-target').innerText = expectedRev;
+
+            document.getElementById('fee-today-rev').innerText = todayRev; document.getElementById('fee-month-rev').innerText = monthRev;
+            document.getElementById('split-cash').innerText = cashTot; document.getElementById('split-upi').innerText = upiTot; document.getElementById('split-bank').innerText = bankTot;
+        }
+
+        function renderFinancialsUI() {
+            let grouped = {};
+            liveFees.forEach(f => {
+                let displayBatch = f.batch || "Unknown";
+                if(!f.batch) { let s = liveStudents.find(st => st.id === f.studentId); displayBatch = s ? s.batch : "Unknown"; }
+                if(displayBatch === 'Alumni') displayBatch = 'Pass Out';
+                
+                let dateObj = new Date(f.timestamp || new Date());
+                let monthName = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
+                let groupKey = `${monthName} - ${displayBatch}`;
+                
+                if(!grouped[groupKey]) grouped[groupKey] = [];
+                grouped[groupKey].push(f);
+            });
+
+            let html = "";
+            let sortedKeys = Object.keys(grouped).sort((a,b) => b.localeCompare(a)); 
+            
+            sortedKeys.forEach(key => {
+                html += `<tr class="group-header"><td colspan="4"><i class="fa-solid fa-layer-group" style="margin-right: 6px;"></i> ${key}</td></tr>`;
+                grouped[key].forEach(f => {
+                    let icon = f.mode === 'UPI' ? 'mobile-screen' : (f.mode === 'Bank Transfer' ? 'building-columns' : 'money-bill');
+                    html += `<tr class="clickable-row">
+                        <td style="color: var(--text-muted); font-size: 13px;">${f.date}</td>
+                        <td style="color: var(--text-main); font-weight: 700;">${f.name}</td>
+                        <td style="color: var(--success); font-weight: 800;">+₹${f.amount}</td>
+                        <td><span class="badge" style="background:var(--surface-muted); border: 1px solid var(--border); color:var(--text-main);"><i class="fa-solid fa-${icon}"></i> ${f.mode || 'Cash'}</span></td>
+                    </tr>`;
+                });
+            });
+            
+            if(sortedKeys.length === 0) html = `<tr><td colspan="4" style="text-align:center; padding: 40px 20px; border: none; color: var(--text-muted);"><i class="fa-solid fa-receipt" style="font-size: 32px; opacity: 0.5; margin-bottom: 10px; display: block;"></i>No transactions recorded yet.</td></tr>`;
+            document.getElementById('feeTableBody').innerHTML = html;
+        }
+
+        // ==========================================
+        // ATTENDANCE MODULE
+        // ==========================================
+        function listenToAttendance() { cloudDB.collection("attendance").onSnapshot((snapshot) => { liveAttendance = {}; snapshot.forEach((doc) => { liveAttendance[doc.id] = doc.data(); }); loadAttendanceList(); if(currentViewedStudentId) viewStudentProfile(currentViewedStudentId); }); }
+        
+        async function toggleAtt(date, studentId, status) { try { await cloudDB.collection("attendance").doc(date).set({ [studentId]: status }, { merge: true }); showToast(`Marked ${status}`); } catch (e) { showToast('Error saving', 'error'); } }
+
+        async function markAllPresent() {
+            const batch = document.getElementById('att-batch').value; const date = document.getElementById('att-date').value; if(!batch || !date) return;
+            let filteredStudents = liveStudents.filter(s => s.batch === batch && s.batch !== "Alumni" && s.batch !== "Left"); if(filteredStudents.length === 0) return;
+            showToast("Marking all present...", "warning"); let updateData = {}; filteredStudents.forEach(s => { updateData[s.id] = 'Present'; });
+            try { await cloudDB.collection("attendance").doc(date).set(updateData, { merge: true }); showToast("Class marked Present!", "success"); } catch(e) { showToast("Error", "error"); }
+        }
+
+        function loadAttendanceList() {
+            const batch = document.getElementById('att-batch').value; const date = document.getElementById('att-date').value; const tbody = document.getElementById('attendanceTableBody'); const actionsContainer = document.getElementById('att-actions-container');
+            if(!batch || !date) { actionsContainer.style.display = 'none'; return; }
+            let filteredStudents = sortStudents(liveStudents.filter(s => s.batch === batch && s.batch !== "Alumni" && s.batch !== "Left"));
+            if(filteredStudents.length === 0) { actionsContainer.style.display = 'none'; return tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 40px 20px; color: var(--text-muted); border: none;"><i class="fa-solid fa-users-slash" style="font-size: 32px; opacity: 0.5; margin-bottom: 10px; display: block;"></i>No active students in this class.</td></tr>`; }
+            
+            actionsContainer.style.display = 'block'; const todaysRecord = liveAttendance[date] || {}; let presentCount = 0; let absentCount = 0;
+            tbody.innerHTML = filteredStudents.map(s => {
+                const status = todaysRecord[s.id] || 'Present'; const isP = status === 'Present'; if(isP) presentCount++; else absentCount++;
+                return `<tr class="standard-table" style="background: ${isP ? 'transparent' : 'rgba(244, 63, 94, 0.05)'}"><td style="font-weight: 700; color: var(--text-main);">${s.name}</td><td><span class="badge" style="background:${isP?'rgba(16, 185, 129, 0.1)':'rgba(244, 63, 94, 0.1)'}; color:${isP?'var(--success)':'var(--danger)'}; border: 1px solid ${isP?'rgba(16, 185, 129, 0.3)':'rgba(244, 63, 94, 0.3)'}">${status}</span></td><td><button class="btn" style="background:var(--surface); color:${isP?'var(--text-main)':'var(--danger)'}; border: 1px solid var(--border); padding: 6px 12px; font-size: 12px; width: auto; box-shadow: var(--shadow-sm);" onclick="toggleAtt('${date}','${s.id}','${isP?'Absent':'Present'}')">Change</button></td></tr>`;
+            }).join('');
+            document.getElementById('att-count-present').innerText = presentCount; document.getElementById('att-count-absent').innerText = absentCount;
+        }
+
+        // ==========================================
+        // ARCHIVE ENGINE (PRO ANALYTICS & SNAPSHOTS)
+        // ==========================================
+        window.currentArchive = null; 
+
+        async function resetMonthlyFees() {
+            if(confirm('Archive current data and start a new month?\n\nThis will take a precise snapshot of all current data, save it to history, and reset dues for active students.')) {
+                showToast("Creating Snapshot...", "warning"); 
+                const cycle = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
+                
+                await cloudDB.collection("archives").add({ 
+                    cycleName: cycle, fees: liveFees, attendance: liveAttendance, studentsSnapshot: liveStudents, timestamp: new Date().toISOString() 
+                });
+                
+                liveFees.forEach(f => { cloudDB.collection("fees").doc(f.id).delete(); }); 
+                Object.keys(liveAttendance).forEach(date => { cloudDB.collection("attendance").doc(date).delete(); });
+                liveStudents.forEach(s => { if(s.batch !== "Alumni" && s.batch !== "Left") cloudDB.collection("students").doc(s.id).update({ totalPaid: 0 }); });
+                
+                showToast("New month started! Data safely archived.", "success");
+            }
+        }
+
+        function listenToArchives() {
+            cloudDB.collection("archives").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+                liveArchives = []; let selectHtml = '<option value="">Select an archived month...</option>';
+                snapshot.forEach(doc => { const data = doc.data(); liveArchives.push({id: doc.id, ...data}); selectHtml += `<option value="${doc.id}">${data.cycleName}</option>`; });
+                document.getElementById('archive-select').innerHTML = selectHtml;
+            });
+        }
+
+        function loadArchiveData() {
+            const id = document.getElementById('archive-select').value; const contentDiv = document.getElementById('archive-content');
+            if(!id) { contentDiv.style.display = 'none'; window.currentArchive = null; return; }
+            
+            contentDiv.style.display = 'block'; 
+            const arc = liveArchives.find(a => a.id === id);
+            window.currentArchive = arc;
+            
+            let pillHtml = `<div class="archive-pill active" onclick="filterArchiveByClass('All', this)">All Classes</div>`;
+            classes.forEach(c => { 
+                let displayName = c === 'Alumni' ? 'Pass Out' : c;
+                pillHtml += `<div class="archive-pill" onclick="filterArchiveByClass('${c}', this)">${displayName}</div>`; 
+            });
+            document.getElementById('arc-class-filters').innerHTML = pillHtml;
+
+            filterArchiveByClass('All', document.querySelector('.archive-pill.active'));
+        }
+
+        function filterArchiveByClass(batch, element) {
+            document.querySelectorAll('.archive-pill').forEach(p => p.classList.remove('active'));
+            if(element) element.classList.add('active');
+
+            const arc = window.currentArchive; if(!arc) return;
+            const sourceStudents = arc.studentsSnapshot || liveStudents;
+            
+            let displayBatch = batch === 'All' ? 'All Classes' : (batch === 'Alumni' ? 'Pass Out' : batch);
+            document.getElementById('arc-fee-badge').innerText = displayBatch; document.getElementById('arc-att-badge').innerText = displayBatch;
+
+            let rev = 0; let trans = 0; let feeHtml = ''; let cashTot = 0; let upiTot = 0; let bankTot = 0;
+            
+            let filteredFees = (arc.fees || []).filter(f => {
+                if(batch === 'All') return true;
+                const s = sourceStudents.find(st => st.id === f.studentId);
+                return s && s.batch === batch;
+            });
+
+            if(filteredFees.length > 0) {
+                trans = filteredFees.length;
+                filteredFees.forEach(f => { 
+                    rev += f.amount; 
+                    if(f.mode === 'Cash') cashTot += f.amount; else if(f.mode === 'UPI') upiTot += f.amount; else if(f.mode === 'Bank Transfer') bankTot += f.amount; else cashTot += f.amount;
+                    let icon = f.mode === 'UPI' ? 'mobile-screen' : (f.mode === 'Bank Transfer' ? 'building-columns' : 'money-bill'); 
+                    feeHtml += `<tr class="standard-table"><td>${f.date}</td><td style="font-weight: 700; color: var(--text-main);">${f.name}</td><td style="color: var(--success); font-weight: 800;">+₹${f.amount}</td><td><span class="badge" style="background:var(--surface-muted); border: 1px solid var(--border); color:var(--text-main);"><i class="fa-solid fa-${icon}"></i> ${f.mode || 'Cash'}</span></td></tr>`; 
+                });
+            } else { feeHtml = `<tr><td colspan="4" style="text-align:center; padding: 40px 20px; border:none; color: var(--text-muted);"><i class="fa-solid fa-receipt" style="font-size: 32px; opacity: 0.5; margin-bottom: 10px; display: block;"></i>No fees collected for ${displayBatch}.</td></tr>`; }
+            
+            document.getElementById('arc-total-rev').innerText = rev; document.getElementById('arc-total-trans').innerText = trans; document.getElementById('arc-feesBody').innerHTML = feeHtml;
+            document.getElementById('arc-split-cash').innerText = cashTot; document.getElementById('arc-split-upi').innerText = upiTot; document.getElementById('arc-split-bank').innerText = bankTot;
+
+            let totalAtt = 0; let presentAtt = 0; let attHtml = '';
+            if(arc.attendance) {
+                Object.keys(arc.attendance).sort((a,b) => new Date(b) - new Date(a)).forEach(date => {
+                    Object.keys(arc.attendance[date]).forEach(studentId => {
+                        const s = sourceStudents.find(st => st.id === studentId);
+                        const sBatch = s ? s.batch : "Unknown";
+                        
+                        if(batch === 'All' || sBatch === batch) {
+                            totalAtt++; const status = arc.attendance[date][studentId]; const isP = status === 'Present'; if(isP) presentAtt++;
+                            const sName = s ? s.name : "Student (Removed)"; 
+                            attHtml += `<tr class="standard-table"><td>${date}</td><td style="font-weight: 700; color: var(--text-main);">${sName}</td><td><span class="badge" style="background:${isP?'rgba(16, 185, 129, 0.1)':'rgba(244, 63, 94, 0.1)'}; color:${isP?'var(--success)':'var(--danger)'}; border: 1px solid ${isP?'rgba(16, 185, 129, 0.3)':'rgba(244, 63, 94, 0.3)'}">${status}</span></td></tr>`;
+                        }
+                    });
+                });
+            }
+            let attRate = totalAtt === 0 ? 0 : Math.round((presentAtt / totalAtt) * 100);
+            document.getElementById('arc-att-rate').innerText = `${attRate}%`;
+            if(!attHtml) attHtml = `<tr><td colspan="3" style="text-align:center; padding: 40px 20px; border:none; color: var(--text-muted);"><i class="fa-solid fa-users-slash" style="font-size: 32px; opacity: 0.5; margin-bottom: 10px; display: block;"></i>No attendance records found for ${displayBatch}.</td></tr>`; 
+            document.getElementById('arc-attBody').innerHTML = attHtml;
+        }
+
+        // ==========================================
+        // SMART PDF EXPORTS
+        // ==========================================
+        function downloadArchivePDF() {
+            const arc = window.currentArchive; if(!arc) return showToast("Please select a month.", "warning");
+            let activeFilterEl = document.querySelector('.archive-pill.active'); let batchFilter = activeFilterEl ? activeFilterEl.innerText : 'All Classes';
+            let filterVal = batchFilter === 'Pass Out' ? 'Alumni' : (batchFilter === 'All Classes' ? 'All' : batchFilter);
+            const sourceStudents = arc.studentsSnapshot || liveStudents;
+
+            let filteredFees = (arc.fees || []).filter(f => { if(filterVal === 'All') return true; const s = sourceStudents.find(st => st.id === f.studentId); return s && s.batch === filterVal; });
+
+            const { jsPDF } = window.jspdf; const doc = new jsPDF();
+            doc.setFontSize(22); doc.setTextColor(67, 56, 202); doc.text("KNOWLEDGE BUILDER", 14, 20); doc.setFontSize(14); doc.setTextColor(51, 65, 85); doc.text(`Archive: ${arc.cycleName} | ${batchFilter}`, 14, 28);
+            let totalCollected = filteredFees.reduce((sum, f) => sum + f.amount, 0); doc.setFontSize(12); doc.setTextColor(16, 185, 129); doc.text(`Revenue for this segment: Rs. ${totalCollected}`, 14, 38);
+            let body = []; if(filteredFees.length > 0) body = filteredFees.map(f => [f.date, f.name, `Rs. ${f.amount}`, f.mode || 'Cash']); if(body.length === 0) body = [["No transactions found", "-", "-", "-"]];
+            
+            doc.autoTable({ startY: 45, head: [['Date', 'Student', 'Amount Received', 'Mode']], body: body, theme: 'striped', headStyles: { fillColor: [67, 56, 202] } }); doc.save(`Knowledge_Builder_Archive_${arc.cycleName.replace(/\s+/g, '_')}_${batchFilter.replace(/\s+/g, '_')}.pdf`); showToast('PDF Downloaded!');
+        }
+
+        function exportIndividualReport() {
+            if(!currentViewedStudentId) return; const student = liveStudents.find(s => s.id === currentViewedStudentId); const { jsPDF } = window.jspdf; const doc = new jsPDF();
+            doc.setFontSize(22); doc.setTextColor(67, 56, 202); doc.text("KNOWLEDGE BUILDER", 14, 20); doc.setFontSize(14); doc.setTextColor(51, 65, 85); doc.text("Student Progress & Financial Report", 14, 28);
+            doc.setFontSize(11); doc.setTextColor(100, 116, 139); doc.text(`Name: ${student.name}`, 14, 40); doc.text(`Class: ${student.batch === 'Alumni' ? 'Pass Out' : student.batch}`, 14, 46); doc.text(`Contact: ${student.phone}`, 14, 52);
+            let bal = student.totalPaid - student.monthlyFee; let stat = (student.batch === "Alumni") ? "Pass Out" : (student.batch === "Left" ? "Left Session" : (bal === 0 ? 'Fully Paid' : (bal < 0 ? `Due: Rs. ${Math.abs(bal)}` : `Advance: Rs. ${bal}`))); doc.text(`Financial Status: ${stat}`, 14, 58);
+            doc.setFontSize(14); doc.setTextColor(15, 23, 42); doc.text("Fee Transaction History", 14, 72);
+            let studentFees = liveFees.filter(f => f.studentId === currentViewedStudentId); let feeBody = studentFees.map(f => [f.date, `Rs. ${f.amount}`, f.mode || 'Cash']); if(feeBody.length === 0) feeBody.push(["No transactions recorded", "-", "-"]);
+            doc.autoTable({ startY: 76, head: [['Date', 'Amount Paid', 'Payment Mode']], body: feeBody, theme: 'grid', headStyles: { fillColor: [67, 56, 202] } });
+            let finalY = doc.lastAutoTable.finalY || 76; doc.text("Attendance Record", 14, finalY + 15);
+            let attBody = []; Object.keys(liveAttendance).sort((a,b) => new Date(b) - new Date(a)).forEach(date => { if(liveAttendance[date][currentViewedStudentId]) { attBody.push([date, liveAttendance[date][currentViewedStudentId]]); } }); if(attBody.length === 0) attBody.push(["No attendance recorded", "-"]);
+            doc.autoTable({ startY: finalY + 20, head: [['Date', 'Status']], body: attBody, theme: 'grid', headStyles: { fillColor: [14, 165, 233] } }); doc.save(`${student.name.replace(/\s+/g, '_')}_Report.pdf`); showToast('Student PDF Downloaded!');
+        }
+
+        function exportData(type) {
+            const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.setFontSize(20); doc.setTextColor(67, 56, 202); doc.text("KNOWLEDGE BUILDER", 14, 20);
+            if(type === 'students') {
+                let titleText = showingPastView ? "Past Students Directory" : "Active Student Directory"; doc.setFontSize(14); doc.setTextColor(51, 65, 85); doc.text(titleText, 14, 28);
+                let listToExport = showingPastView ? liveStudents.filter(s => s.batch === "Alumni" || s.batch === "Left") : liveStudents.filter(s => s.batch !== "Alumni" && s.batch !== "Left");
+                let body = sortStudents(listToExport).map(s => { let bal = s.totalPaid - s.monthlyFee; let stat = (s.batch === "Alumni") ? "Pass Out" : (s.batch === "Left" ? "Left" : (bal === 0 ? 'Paid' : (bal < 0 ? `Due ${Math.abs(bal)}` : `Advance ${bal}`))); return [s.name, s.batch, s.phone, `Rs. ${s.monthlyFee}`, stat]; });
+                doc.autoTable({ startY: 35, head: [['Name', 'Class', 'Contact', 'Monthly Fee', 'Status']], body: body, theme: 'striped', headStyles: { fillColor: [67, 56, 202] } });
+            } else if (type === 'past_students') {
+                doc.setFontSize(14); doc.setTextColor(51, 65, 85); doc.text("Past Students", 14, 28);
+                let body = sortStudents(liveStudents.filter(s => s.batch === "Alumni" || s.batch === "Left")).map(s => { return [s.name, s.batch === "Alumni" ? "Pass Out" : "Left", s.phone, `Rs. ${s.totalPaid}`]; });
+                doc.autoTable({ startY: 35, head: [['Name', 'Exit Status', 'Contact', 'Final LTV']], body: body, theme: 'striped', headStyles: { fillColor: [67, 56, 202] } });
+            } else if (type === 'fees') {
+                doc.setFontSize(14); doc.setTextColor(51, 65, 85); doc.text("Current Month Transactions", 14, 28);
+                let body = liveFees.map(f => [f.date, f.name, `Rs. ${f.amount}`, f.mode || 'Cash']);
+                doc.autoTable({ startY: 35, head: [['Date', 'Student Name', 'Amount', 'Mode']], body: body, theme: 'striped', headStyles: { fillColor: [16, 185, 129] } });
+            }
+            doc.save(`Knowledge_Builder_${type}.pdf`); showToast(`PDF generated!`);
+        }
+
+        function navigate(id) { 
+            currentViewedStudentId = null; document.querySelectorAll('.content-section').forEach(e => e.classList.remove('active')); document.getElementById(id).classList.add('active'); 
+            document.querySelectorAll('.nav-item, .sidebar-item').forEach(e => { if(e.getAttribute('data-target') === id) { e.classList.add('active'); } else { e.classList.remove('active'); } }); window.scrollTo(0,0); 
+        }
+        function openModal(id) { document.getElementById(id).classList.add('active'); if(id === 'feeModal') populateFeeDropdown(); if(id === 'editStudentModal' && currentViewedStudentId) { const s = liveStudents.find(x => x.id === currentViewedStudentId); document.getElementById('e-name').value = s.name; document.getElementById('e-batch').value = s.batch; document.getElementById('e-phone').value = s.phone; document.getElementById('e-fee').value = s.monthlyFee; } }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function handleOverlayClick(e, id) { if(e.target.id === id) closeModal(id); }
+        function showToast(msg, type = 'success') { const container = document.getElementById('toast-container'); const t = document.createElement('div'); t.className = `toast ${type}`; const icon = type === 'success' ? 'fa-circle-check' : 'fa-bell'; t.innerHTML = `<i class="fa-solid ${icon}" style="font-size: 18px;"></i> <span>${msg}</span>`; container.appendChild(t); setTimeout(() => t.classList.add('show'), 10); setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3500); }
+        function populateClassDropdowns() { const sBatch = document.getElementById('s-batch'); const eBatch = document.getElementById('e-batch'); const attBatch = document.getElementById('att-batch'); const filterBatch = document.getElementById('filter-batch'); classes.forEach(c => { sBatch.innerHTML += `<option value="${c}">${c}</option>`; eBatch.innerHTML += `<option value="${c}">${c}</option>`; if(c !== "Alumni" && c !== "Left") { attBatch.innerHTML += `<option value="${c}">${c}</option>`; filterBatch.innerHTML += `<option value="${c}">${c}</option>`; } }); }
+        function sendWhatsApp(phone, name, dueAmount) { const message = `Hello, this is a gentle reminder from Knowledge Builder. \n\n*${name}* has a pending tuition fee of *₹${dueAmount}* for this month. Kindly process the payment at your earliest convenience.\n\nThank you!`; const finalPhone = phone.replace(/\D/g, '').length === 10 ? '91' + phone.replace(/\D/g, '') : phone.replace(/\D/g, ''); window.open(`https://wa.me/${finalPhone}?text=${encodeURIComponent(message)}`, '_blank'); }
+    </script>
+</body>
+</html>
