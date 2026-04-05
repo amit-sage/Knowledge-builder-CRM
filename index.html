@@ -35,16 +35,16 @@
 
         body.dark-theme {
             --bg-app: #020617; 
-            --surface: rgba(24, 24, 27, 0.6); 
-            --surface-hover: rgba(39, 39, 42, 0.8);
-            --surface-muted: rgba(255, 255, 255, 0.02);
+            --surface: #0f172a; 
+            --surface-hover: #1e293b;
+            --surface-muted: #1e293b;
             --text-main: #f8fafc; 
             --text-muted: #94a3b8; 
-            --border: rgba(255, 255, 255, 0.08);
+            --border: #1e293b;
             --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
             --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
-            --glass-bg: rgba(9, 9, 11, 0.8);
-            --progress-bg: #27272a;
+            --glass-bg: rgba(15, 23, 42, 0.85);
+            --progress-bg: #334155;
             --ambient-glow: radial-gradient(circle at 50% 0%, rgba(67, 56, 202, 0.15), transparent 60%);
             --toast-bg: #f8fafc; --toast-text: #0f172a;
         }
@@ -168,6 +168,10 @@
         .progress-bar { height: 6px; background: var(--progress-bg); border-radius: 10px; overflow: hidden; display: flex; }
         .progress-fill { background: linear-gradient(90deg, var(--secondary), var(--primary)); height: 100%; border-radius: 10px; transition: width 1s ease-out; }
         .progress-text { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-top: 8px; }
+
+        .mini-stat { background: var(--surface-muted); padding: 16px; border-radius: 12px; border: 1px solid var(--border); flex: 1; text-align: center; transition: all 0.3s; }
+        .mini-stat h4 { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+        .mini-stat p { font-size: 22px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px;}
 
         .panel { background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-md); border: 1px solid var(--border); overflow: hidden; margin-bottom: 24px; transition: background-color 0.3s; }
         .panel-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
@@ -769,7 +773,7 @@
             <form id="studentForm" onsubmit="saveStudent(event)">
                 <div class="form-group"><label>Full Name</label><input type="text" id="s-name" required placeholder="Student's name"></div>
                 <div class="form-group"><label>Standard / Class</label><select id="s-batch" required></select></div>
-                <div class="form-group"><label>Parent Contact (10 Digits)</label><input type="tel" id="s-phone" required pattern="[0-9]{10}" placeholder="9876543210"></div>
+                <div class="form-group"><label>Parent Contact (10 Digits)</label><input type="tel" id="s-phone" required pattern="\d{10}" title="Please enter exactly 10 digits" placeholder="9876543210" oninput="formatPhoneInput(this)"></div>
                 <div class="form-group"><label>Monthly Tuition Fee (₹)</label><input type="number" id="s-fee" required placeholder="E.g. 1500"></div>
                 <div style="display: flex; gap: 10px; margin-top: 24px;">
                     <button type="button" class="btn btn-outline" style="flex: 1;" onclick="closeModal('studentModal')">Cancel</button>
@@ -789,7 +793,7 @@
                     <label>Status / Class</label>
                     <select id="e-batch" required></select>
                 </div>
-                <div class="form-group"><label>Parent Contact (10 Digits)</label><input type="tel" id="e-phone" required pattern="[0-9]{10}"></div>
+                <div class="form-group"><label>Parent Contact (10 Digits)</label><input type="tel" id="e-phone" required pattern="\d{10}" title="Please enter exactly 10 digits" oninput="formatPhoneInput(this)"></div>
                 <div class="form-group"><label>Monthly Tuition Fee (₹)</label><input type="number" id="e-fee" required></div>
                 <div style="display: flex; gap: 10px; margin-top: 24px;">
                     <button type="button" class="btn btn-outline" style="flex: 1;" onclick="closeModal('editStudentModal')">Cancel</button>
@@ -887,6 +891,25 @@
             if(el) el.innerText = `${greeting}, Amit.`;
         }
 
+        // NEW SMART PASTE ENGINE FOR PHONE NUMBERS
+        function formatPhoneInput(input) {
+            // Remove everything that is not a number
+            let val = input.value.replace(/\D/g, '');
+            
+            // If it has country code 91, strip it automatically
+            if (val.length > 10 && val.startsWith('91')) {
+                val = val.substring(2);
+            }
+            
+            // Ensure it's exactly 10 digits maximum
+            if (val.length > 10) {
+                val = val.substring(val.length - 10);
+            }
+            
+            input.value = val;
+            input.setCustomValidity(""); // Clears any ghost browser validation errors
+        }
+
         window.onload = () => {
             if(isDarkTheme) { document.body.classList.add('dark-theme'); updateThemeIcons(); }
             
@@ -966,74 +989,49 @@
 
         function setPaymentMode(mode, element) {
             document.querySelectorAll('.pay-opt').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
-            document.getElementById('f-mode').value = mode;
+            element.classList.add('active'); document.getElementById('f-mode').value = mode;
         }
 
         function populateFeeDropdown() { 
-            let activeStus = sortStudents(liveStudents.filter(s => s.batch !== "Alumni" && s.batch !== "Left"));
-            let listHtml = "";
+            let activeStus = sortStudents(liveStudents.filter(s => s.batch !== "Alumni" && s.batch !== "Left")); let listHtml = "";
             activeStus.forEach(s => {
                 let due = s.monthlyFee - s.totalPaid;
                 listHtml += `<div class="custom-option" onclick="selectFeeStudent('${s.id}', '${s.name.replace(/'/g, "\\'")}', ${due})">
-                    <span class="stu-name">${s.name}</span>
-                    <span class="stu-batch">${s.batch}</span>
+                    <span class="stu-name">${s.name}</span><span class="stu-batch">${s.batch}</span>
                 </div>`;
             });
             document.getElementById('f-student-list').innerHTML = listHtml; 
         }
 
         function filterFeeStudents() {
-            let val = document.getElementById('f-student-search').value.toLowerCase();
-            let options = document.getElementById('f-student-list').children;
-            let hasVisible = false;
-            for(let opt of options) {
-                if(opt.innerText.toLowerCase().includes(val)) {
-                    opt.style.display = "flex"; hasVisible = true;
-                } else { opt.style.display = "none"; }
-            }
+            let val = document.getElementById('f-student-search').value.toLowerCase(); let options = document.getElementById('f-student-list').children; let hasVisible = false;
+            for(let opt of options) { if(opt.innerText.toLowerCase().includes(val)) { opt.style.display = "flex"; hasVisible = true; } else { opt.style.display = "none"; } }
             document.getElementById('f-student-list').style.display = hasVisible ? "block" : "none";
         }
 
         function showFeeStudentList() { document.getElementById('f-student-list').style.display = "block"; filterFeeStudents(); }
 
         function selectFeeStudent(id, name, dueAmount) {
-            document.getElementById('f-student-search').value = name;
-            document.getElementById('f-student').value = id;
-            document.getElementById('f-student-list').style.display = "none";
-            
-            document.getElementById('f-amount').value = dueAmount > 0 ? dueAmount : '';
-            
-            document.querySelectorAll('.quick-amt-chip').forEach(c => c.classList.remove('highlight'));
-            document.querySelector('.quick-amt-chip').classList.add('highlight');
+            document.getElementById('f-student-search').value = name; document.getElementById('f-student').value = id;
+            document.getElementById('f-student-list').style.display = "none"; document.getElementById('f-amount').value = dueAmount > 0 ? dueAmount : '';
+            document.querySelectorAll('.quick-amt-chip').forEach(c => c.classList.remove('highlight')); document.querySelector('.quick-amt-chip').classList.add('highlight');
         }
 
         function setQuickAmount(val, element) {
-            document.querySelectorAll('.quick-amt-chip').forEach(c => c.classList.remove('highlight'));
-            element.classList.add('highlight');
-
+            document.querySelectorAll('.quick-amt-chip').forEach(c => c.classList.remove('highlight')); element.classList.add('highlight');
             const input = document.getElementById('f-amount');
             if(val === 'full') {
-                const sId = document.getElementById('f-student').value;
-                if(!sId) return;
+                const sId = document.getElementById('f-student').value; if(!sId) return;
                 const s = liveStudents.find(st => st.id === sId);
                 if(s) { let due = s.monthlyFee - s.totalPaid; input.value = due > 0 ? due : ''; }
-            } else {
-                let currentVal = parseInt(input.value) || 0;
-                input.value = currentVal + val;
-            }
+            } else { let currentVal = parseInt(input.value) || 0; input.value = currentVal + val; }
         }
 
         async function processFee(e) {
             e.preventDefault(); 
-            const studentId = document.getElementById('f-student').value;
-            if(!studentId) { showToast('Please select a student from the list!', 'warning'); return; }
-            const studentName = document.getElementById('f-student-search').value; 
-            const amt = parseInt(document.getElementById('f-amount').value); const mode = document.getElementById('f-mode').value;
-            
-            const s = liveStudents.find(st => st.id === studentId);
-            const batchAtTimeOfPayment = s ? s.batch : "Unknown";
-
+            const studentId = document.getElementById('f-student').value; if(!studentId) { showToast('Please select a student from the list!', 'warning'); return; }
+            const studentName = document.getElementById('f-student-search').value; const amt = parseInt(document.getElementById('f-amount').value); const mode = document.getElementById('f-mode').value;
+            const s = liveStudents.find(st => st.id === studentId); const batchAtTimeOfPayment = s ? s.batch : "Unknown";
             try { 
                 await cloudDB.collection("students").doc(studentId).update({ totalPaid: firebase.firestore.FieldValue.increment(amt) }); 
                 await cloudDB.collection("fees").add({ studentId: studentId, name: studentName, amount: amt, mode: mode, batch: batchAtTimeOfPayment, date: new Date().toLocaleDateString(), timestamp: new Date().toISOString() }); 
@@ -1054,8 +1052,7 @@
 
         async function executeYearlyUpgrade() {
             if(confirm("Are you sure you want to upgrade all ACTIVE students to their next class?")) {
-                showToast("Upgrading... please wait.", "warning");
-                let batchPromises = [];
+                showToast("Upgrading... please wait.", "warning"); let batchPromises = [];
                 liveStudents.forEach((s) => {
                     if(s.batch !== "Alumni" && s.batch !== "Left") {
                         let currentClassNum = parseInt(s.batch.match(/\d+/));
@@ -1066,8 +1063,7 @@
                     await Promise.all(batchPromises);
                     const today = new Date(); let currentAcademicYear = today.getMonth() >= 3 ? today.getFullYear() : today.getFullYear() - 1;
                     localSettings.lastUpgradedYear = currentAcademicYear; localStorage.setItem('kb_settings', JSON.stringify(localSettings));
-                    document.getElementById('upgrade-banner-container').style.display = 'none';
-                    showToast("All students upgraded!", "success");
+                    document.getElementById('upgrade-banner-container').style.display = 'none'; showToast("All students upgraded!", "success");
                 } catch(e) { showToast("Error upgrading students", "error"); }
             }
         }
@@ -1083,11 +1079,9 @@
         function listenToStudents() {
             cloudDB.collection("students").onSnapshot((snapshot) => {
                 liveStudents = []; snapshot.forEach((doc) => { liveStudents.push({ id: doc.id, ...doc.data() }); });
-                studentsLoaded = true;
-                renderStudentsUI(); 
+                studentsLoaded = true; renderStudentsUI(); 
                 if(document.getElementById('feeModal').classList.contains('active')) populateFeeDropdown();
                 if(currentViewedStudentId) viewStudentProfile(currentViewedStudentId);
-                
                 if(feesLoaded) { updateDashboard(); renderFinancialsUI(); }
             });
         }
@@ -1122,13 +1116,9 @@
                     }
 
                     let balance = s.totalPaid - s.monthlyFee; let statusHtml = "";
-                    if (balance === 0) { 
-                        statusHtml = `<span class="badge" style="background:rgba(16, 185, 129, 0.1); color:var(--success);"><span class="status-dot dot-success"></span> Paid</span>`; 
-                    } else if (balance < 0) { 
-                        statusHtml = `<span class="badge" style="background:rgba(244, 63, 94, 0.1); color:var(--danger);"><span class="status-dot dot-danger"></span> Due: ₹${Math.abs(balance)}</span>`; 
-                    } else { 
-                        statusHtml = `<span class="badge" style="background:rgba(67, 56, 202, 0.1); color:var(--primary);"><span class="status-dot dot-primary"></span> Adv: ₹${balance}</span>`; 
-                    }
+                    if (balance === 0) { statusHtml = `<span class="badge" style="background:rgba(16, 185, 129, 0.1); color:var(--success);"><span class="status-dot dot-success"></span> Paid</span>`; } 
+                    else if (balance < 0) { statusHtml = `<span class="badge" style="background:rgba(244, 63, 94, 0.1); color:var(--danger);"><span class="status-dot dot-danger"></span> Due: ₹${Math.abs(balance)}</span>`; } 
+                    else { statusHtml = `<span class="badge" style="background:rgba(67, 56, 202, 0.1); color:var(--primary);"><span class="status-dot dot-primary"></span> Adv: ₹${balance}</span>`; }
                     
                     let initial = s.name.charAt(0).toUpperCase();
 
@@ -1198,10 +1188,13 @@
             else { balEl.innerHTML = `<span style="color:var(--primary);">Advance: ₹${balance}</span>`; }
 
             let studentFees = liveFees.filter(f => f.studentId === studentId); let feeHtml = studentFees.length === 0 ? `<tr><td colspan="4" style="text-align:center; padding: 20px; border:none;">No fees found.</td></tr>` : '';
-            studentFees.forEach(f => { let icon = f.mode === 'UPI' ? 'mobile-screen' : (f.mode === 'Bank Transfer' ? 'building-columns' : 'money-bill'); feeHtml += `<tr style="border-bottom: 1px solid var(--border);"><td>${f.date}</td><td style="color: var(--success); font-weight: 800;">+₹${f.amount}</td><td><span class="badge" style="background:var(--surface-muted); border: 1px solid var(--border); color:var(--text-main);"><i class="fa-solid fa-${icon}"></i> ${f.mode || 'Cash'}</span></td><td><button class="btn btn-outline" style="padding: 6px 12px; width: auto; color: var(--primary); border-color: var(--primary);" onclick="downloadReceipt('${f.id}')"><i class="fa-solid fa-file-invoice"></i></button></td></tr>`; });
+            studentFees.forEach(f => { 
+                let icon = f.mode === 'UPI' ? 'mobile-screen' : (f.mode === 'Bank Transfer' ? 'building-columns' : 'money-bill'); 
+                feeHtml += `<tr class="standard-table"><td>${f.date}</td><td style="color: var(--success); font-weight: 800;">+₹${f.amount}</td><td><span class="badge" style="background:var(--surface-muted); border: 1px solid var(--border); color:var(--text-main);"><i class="fa-solid fa-${icon}"></i> ${f.mode || 'Cash'}</span></td><td><button class="btn btn-outline" style="padding: 6px 12px; width: auto; color: var(--primary); border-color: var(--primary);" onclick="downloadReceipt('${f.id}')"><i class="fa-solid fa-file-invoice"></i></button></td></tr>`; 
+            });
             document.getElementById('sp-feesBody').innerHTML = feeHtml;
 
-            let attHtml = ''; let attCount = 0; Object.keys(liveAttendance).sort((a,b) => new Date(b) - new Date(a)).forEach(date => { if(liveAttendance[date][studentId]) { attCount++; const status = liveAttendance[date][studentId]; const isP = status === 'Present'; attHtml += `<tr style="border-bottom: 1px solid var(--border);"><td style="font-weight: 600;">${date}</td><td><span class="badge" style="background:${isP?'rgba(16, 185, 129, 0.1)':'rgba(244, 63, 94, 0.1)'}; color:${isP?'var(--success)':'var(--danger)'}; border: 1px solid ${isP?'rgba(16, 185, 129, 0.3)':'rgba(244, 63, 94, 0.3)'}">${status}</span></td></tr>`; } });
+            let attHtml = ''; let attCount = 0; Object.keys(liveAttendance).sort((a,b) => new Date(b) - new Date(a)).forEach(date => { if(liveAttendance[date][studentId]) { attCount++; const status = liveAttendance[date][studentId]; const isP = status === 'Present'; attHtml += `<tr class="standard-table"><td style="font-weight: 600;">${date}</td><td><span class="badge" style="background:${isP?'rgba(16, 185, 129, 0.1)':'rgba(244, 63, 94, 0.1)'}; color:${isP?'var(--success)':'var(--danger)'}; border: 1px solid ${isP?'rgba(16, 185, 129, 0.3)':'rgba(244, 63, 94, 0.3)'}">${status}</span></td></tr>`; } });
             if(attCount === 0) attHtml = `<tr><td colspan="2" style="text-align:center; padding: 20px; border:none;">No attendance found.</td></tr>`; document.getElementById('sp-attBody').innerHTML = attHtml;
             document.querySelectorAll('.content-section').forEach(e => e.classList.remove('active')); document.getElementById('student-profile').classList.add('active'); window.scrollTo(0, 0);
         }
@@ -1329,7 +1322,6 @@
                 liveFees.forEach(f => { cloudDB.collection("fees").doc(f.id).delete(); }); 
                 Object.keys(liveAttendance).forEach(date => { cloudDB.collection("attendance").doc(date).delete(); });
                 
-                // LEDGER CARRYOVER FIX
                 liveStudents.forEach(s => { 
                     if(s.batch !== "Alumni" && s.batch !== "Left") {
                         let carryOverBalance = s.totalPaid - s.monthlyFee;
