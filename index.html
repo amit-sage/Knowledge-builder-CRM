@@ -17,7 +17,6 @@
             --pdf-red: #e11d48; --alumni-purple: #a855f7;
             --radius-lg: 24px; --radius-md: 16px; --nav-height: 70px;
 
-            /* Light Theme Defaults */
             --bg-app: #f1f5f9; 
             --surface: #ffffff; 
             --surface-hover: #f8fafc;
@@ -75,44 +74,48 @@
         /* =========================================================
            LOGIN / AUTHENTICATION PAGE (SECURED)
            ========================================================= */
-        #landing-page { position: fixed; inset: 0; z-index: 9999; background: var(--bg-app); display: flex; transition: opacity 0.6s ease, transform 0.6s ease; overflow: hidden; }
+        #landing-page { position: fixed; inset: 0; z-index: 9999; background: #020617; display: flex; transition: opacity 0.6s ease, transform 0.6s ease; overflow: hidden; }
         #landing-page.hidden { opacity: 0; transform: scale(1.05); pointer-events: none; }
         
-        .auth-visual { flex: 1; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: none; flex-direction: column; justify-content: center; align-items: center; padding: 40px; position: relative; overflow: hidden; color: white; }
-        .auth-visual::before { content: ''; position: absolute; width: 150%; height: 150%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); top: -25%; left: -25%; animation: rotateGlow 20s linear infinite; }
-        @keyframes rotateGlow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .auth-visual-content { position: relative; z-index: 2; max-width: 400px; text-align: center; }
-        .auth-visual-content h1 { font-size: 42px; font-weight: 800; letter-spacing: -1px; margin-bottom: 16px; line-height: 1.1; }
-        .auth-visual-content p { font-size: 16px; opacity: 0.9; line-height: 1.6; }
-        .hero-logo-large { width: 90px; height: 90px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 24px; display: flex; justify-content: center; align-items: center; font-size: 40px; color: white; margin: 0 auto 30px; border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .auth-visual { flex: 1; background: radial-gradient(circle at 15% 50%, rgba(67, 56, 202, 0.25), transparent 50%), radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.25), transparent 50%), #0f172a; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 40px; position: relative; overflow: hidden; color: white; }
+        .auth-visual-content { position: relative; z-index: 2; max-width: 450px; text-align: center; }
+        .auth-visual-content h1 { font-size: 46px; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 20px; line-height: 1.1; background: linear-gradient(to right, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .auth-visual-content p { font-size: 18px; opacity: 0.8; line-height: 1.6; font-weight: 500; }
+        .hero-logo-large { width: 100px; height: 100px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 28px; display: flex; justify-content: center; align-items: center; font-size: 45px; color: white; margin: 0 auto 30px; box-shadow: 0 20px 50px rgba(67, 56, 202, 0.4); }
 
-        .floating-ui { position: absolute; background: rgba(255,255,255,0.15); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.2); padding: 12px 20px; border-radius: 100px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 10px; z-index: 2; box-shadow: 0 10px 30px rgba(0,0,0,0.1); animation: floatUI 6s infinite alternate ease-in-out; }
-        .floating-ui i { background: white; color: var(--primary); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
-        .ui-1 { top: 20%; left: 10%; animation-delay: 0s; }
-        .ui-2 { bottom: 25%; right: 10%; animation-delay: -2s; }
-        .ui-3 { top: 50%; right: 5%; animation-delay: -4s; }
+        .floating-ui { position: absolute; background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); padding: 14px 24px; border-radius: 100px; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 12px; z-index: 2; box-shadow: 0 10px 40px rgba(0,0,0,0.2); animation: floatUI 6s infinite alternate ease-in-out; color: #f8fafc; }
+        .floating-ui i { background: rgba(255,255,255,0.1); color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .ui-1 { top: 15%; left: 10%; animation-delay: 0s; }
+        .ui-1 i { color: #10b981; background: rgba(16, 185, 129, 0.2); }
+        .ui-2 { bottom: 20%; right: 10%; animation-delay: -2s; }
+        .ui-2 i { color: #f59e0b; background: rgba(245, 158, 11, 0.2); }
+        .ui-3 { top: 45%; right: 5%; animation-delay: -4s; }
+        .ui-3 i { color: #06b6d4; background: rgba(6, 182, 212, 0.2); }
         @keyframes floatUI { 0% { transform: translateY(0px); } 100% { transform: translateY(-20px); } }
 
-        .auth-panel { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; background: var(--bg-app); position: relative; z-index: 10; }
-        .login-card { width: 100%; max-width: 400px; background: var(--surface); padding: 40px 30px; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--border); text-align: center; }
+        .auth-panel { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; background: transparent; position: relative; z-index: 10; }
+        .login-card { width: 100%; max-width: 420px; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(25px); padding: 40px 36px; border-radius: 28px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.1); text-align: center; }
         
-        .mobile-only-logo { display: none; width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 16px; justify-content: center; align-items: center; font-size: 28px; color: white; margin: 0 auto 20px; box-shadow: 0 10px 25px rgba(67, 56, 202, 0.3); }
+        .mobile-only-logo { display: none; width: 70px; height: 70px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 20px; justify-content: center; align-items: center; font-size: 32px; color: white; margin: 0 auto 24px; box-shadow: 0 15px 35px rgba(67, 56, 202, 0.4); }
         
-        .login-card h2 { font-size: 24px; color: var(--text-main); margin-bottom: 8px; font-weight: 800; letter-spacing: -0.5px;}
-        .login-card p { color: var(--text-muted); margin-bottom: 30px; font-size: 14px; }
+        .login-card h2 { font-size: 26px; color: #f8fafc; margin-bottom: 8px; font-weight: 800; letter-spacing: -0.5px;}
+        .login-card p { color: #94a3b8; margin-bottom: 32px; font-size: 15px; font-weight: 500; }
         
-        .auth-form { display: flex; flex-direction: column; gap: 16px; text-align: left; }
-        .auth-form label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .auth-form input { width: 100%; padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 15px; background: var(--surface-muted); color: var(--text-main); outline: none; transition: all 0.3s; }
-        .auth-form input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(67, 56, 202, 0.15); }
-        body.dark-theme .auth-form input { background: rgba(255,255,255,0.03); }
+        .auth-form { display: flex; flex-direction: column; gap: 20px; text-align: left; }
+        .auth-form label { font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+        .auth-form input { width: 100%; padding: 16px; border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; font-size: 15px; background: rgba(0,0,0,0.2); color: #f8fafc; outline: none; transition: all 0.3s; }
+        .auth-form input:focus { border-color: var(--primary); background: rgba(0,0,0,0.4); box-shadow: 0 0 0 4px rgba(67, 56, 202, 0.2); }
+        .auth-form input::placeholder { color: #475569; }
+
+        .btn-auth { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 16px; font-size: 16px; border-radius: 14px; margin-top: 10px; box-shadow: 0 10px 25px rgba(67, 56, 202, 0.3); font-weight: 700; border: none; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; width: 100%; }
+        .btn-auth:hover { box-shadow: 0 15px 35px rgba(67, 56, 202, 0.4); transform: translateY(-2px); }
+        .btn-auth:active { transform: scale(0.96) translateY(0); }
 
         @media (min-width: 900px) {
             .auth-visual { display: flex; }
-            .login-card { box-shadow: none; border: none; padding: 0; background: transparent; }
         }
         @media (max-width: 899px) {
+            #landing-page { background: radial-gradient(circle at 50% 0%, rgba(67, 56, 202, 0.3), transparent 70%), #020617; }
             .mobile-only-logo { display: flex; }
         }
 
@@ -262,7 +265,7 @@
         .quick-amt-chip.highlight { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.4); color: var(--success); }
 
         /* PAYMENT MODE CARDS */
-        .pay-opt-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
+        .pay-opt-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 8px; }
         .pay-opt { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 16px 10px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface-muted); color: var(--text-muted); cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); font-weight: 700; font-size: 13px; user-select: none; }
         .pay-opt i { font-size: 24px; transition: transform 0.2s; }
         .pay-opt:active { transform: scale(0.95); }
@@ -835,13 +838,14 @@
                         <div class="pay-opt active" onclick="setPaymentMode('Cash', this)"><i class="fa-solid fa-money-bill"></i> Cash</div>
                         <div class="pay-opt" onclick="setPaymentMode('UPI', this)"><i class="fa-solid fa-mobile-screen"></i> UPI</div>
                         <div class="pay-opt" onclick="setPaymentMode('Bank Transfer', this)"><i class="fa-solid fa-building-columns"></i> Bank</div>
+                        <div class="pay-opt" onclick="setPaymentMode('Leave', this)"><i class="fa-solid fa-calendar-xmark"></i> Leave</div>
                     </div>
                     <input type="hidden" id="f-mode" value="Cash">
                 </div>
 
                 <div style="display: flex; gap: 10px; margin-top: 24px;">
                     <button type="button" class="btn btn-outline" style="flex: 1;" onclick="closeModal('feeModal')">Cancel</button>
-                    <button type="submit" class="btn btn-primary" style="flex: 2; background: var(--success); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">Confirm Paid</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 2; background: var(--success); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">Confirm</button>
                 </div>
             </form>
         </div>
@@ -891,23 +895,13 @@
             if(el) el.innerText = `${greeting}, Bro.`;
         }
 
-        // NEW SMART PASTE ENGINE FOR PHONE NUMBERS
+        // SMART PASTE ENGINE FOR PHONE NUMBERS
         function formatPhoneInput(input) {
-            // Remove everything that is not a number
             let val = input.value.replace(/\D/g, '');
-            
-            // If it has country code 91, strip it automatically
-            if (val.length > 10 && val.startsWith('91')) {
-                val = val.substring(2);
-            }
-            
-            // Ensure it's exactly 10 digits maximum
-            if (val.length > 10) {
-                val = val.substring(val.length - 10);
-            }
-            
+            if (val.length > 10 && val.startsWith('91')) { val = val.substring(2); }
+            if (val.length > 10) { val = val.substring(val.length - 10); }
             input.value = val;
-            input.setCustomValidity(""); // Clears any ghost browser validation errors
+            input.setCustomValidity(""); 
         }
 
         window.onload = () => {
@@ -989,53 +983,102 @@
 
         function setPaymentMode(mode, element) {
             document.querySelectorAll('.pay-opt').forEach(el => el.classList.remove('active'));
-            element.classList.add('active'); document.getElementById('f-mode').value = mode;
+            element.classList.add('active'); 
+            document.getElementById('f-mode').value = mode;
+            
+            // FULL MONTH LEAVE LOGIC
+            if(mode === 'Leave') {
+                document.getElementById('f-amount').value = 0;
+                document.getElementById('f-amount').disabled = true;
+                document.querySelectorAll('.quick-amt-chip').forEach(c => c.style.opacity = '0.5');
+            } else {
+                document.getElementById('f-amount').disabled = false;
+                document.querySelectorAll('.quick-amt-chip').forEach(c => c.style.opacity = '1');
+            }
         }
 
         function populateFeeDropdown() { 
-            let activeStus = sortStudents(liveStudents.filter(s => s.batch !== "Alumni" && s.batch !== "Left")); let listHtml = "";
+            let activeStus = sortStudents(liveStudents.filter(s => s.batch !== "Alumni" && s.batch !== "Left"));
+            let listHtml = "";
             activeStus.forEach(s => {
                 let due = s.monthlyFee - s.totalPaid;
                 listHtml += `<div class="custom-option" onclick="selectFeeStudent('${s.id}', '${s.name.replace(/'/g, "\\'")}', ${due})">
-                    <span class="stu-name">${s.name}</span><span class="stu-batch">${s.batch}</span>
+                    <span class="stu-name">${s.name}</span>
+                    <span class="stu-batch">${s.batch}</span>
                 </div>`;
             });
             document.getElementById('f-student-list').innerHTML = listHtml; 
         }
 
         function filterFeeStudents() {
-            let val = document.getElementById('f-student-search').value.toLowerCase(); let options = document.getElementById('f-student-list').children; let hasVisible = false;
-            for(let opt of options) { if(opt.innerText.toLowerCase().includes(val)) { opt.style.display = "flex"; hasVisible = true; } else { opt.style.display = "none"; } }
+            let val = document.getElementById('f-student-search').value.toLowerCase();
+            let options = document.getElementById('f-student-list').children;
+            let hasVisible = false;
+            for(let opt of options) {
+                if(opt.innerText.toLowerCase().includes(val)) {
+                    opt.style.display = "flex"; hasVisible = true;
+                } else { opt.style.display = "none"; }
+            }
             document.getElementById('f-student-list').style.display = hasVisible ? "block" : "none";
         }
 
         function showFeeStudentList() { document.getElementById('f-student-list').style.display = "block"; filterFeeStudents(); }
 
         function selectFeeStudent(id, name, dueAmount) {
-            document.getElementById('f-student-search').value = name; document.getElementById('f-student').value = id;
-            document.getElementById('f-student-list').style.display = "none"; document.getElementById('f-amount').value = dueAmount > 0 ? dueAmount : '';
-            document.querySelectorAll('.quick-amt-chip').forEach(c => c.classList.remove('highlight')); document.querySelector('.quick-amt-chip').classList.add('highlight');
+            document.getElementById('f-student-search').value = name;
+            document.getElementById('f-student').value = id;
+            document.getElementById('f-student-list').style.display = "none";
+            
+            if(document.getElementById('f-mode').value !== 'Leave') {
+                document.getElementById('f-amount').value = dueAmount > 0 ? dueAmount : '';
+            }
+            
+            document.querySelectorAll('.quick-amt-chip').forEach(c => c.classList.remove('highlight'));
+            document.querySelector('.quick-amt-chip').classList.add('highlight');
         }
 
         function setQuickAmount(val, element) {
-            document.querySelectorAll('.quick-amt-chip').forEach(c => c.classList.remove('highlight')); element.classList.add('highlight');
+            if(document.getElementById('f-mode').value === 'Leave') return;
+            document.querySelectorAll('.quick-amt-chip').forEach(c => c.classList.remove('highlight'));
+            element.classList.add('highlight');
+
             const input = document.getElementById('f-amount');
             if(val === 'full') {
-                const sId = document.getElementById('f-student').value; if(!sId) return;
+                const sId = document.getElementById('f-student').value;
+                if(!sId) return;
                 const s = liveStudents.find(st => st.id === sId);
                 if(s) { let due = s.monthlyFee - s.totalPaid; input.value = due > 0 ? due : ''; }
-            } else { let currentVal = parseInt(input.value) || 0; input.value = currentVal + val; }
+            } else {
+                let currentVal = parseInt(input.value) || 0;
+                input.value = currentVal + val;
+            }
         }
 
         async function processFee(e) {
             e.preventDefault(); 
-            const studentId = document.getElementById('f-student').value; if(!studentId) { showToast('Please select a student from the list!', 'warning'); return; }
-            const studentName = document.getElementById('f-student-search').value; const amt = parseInt(document.getElementById('f-amount').value); const mode = document.getElementById('f-mode').value;
-            const s = liveStudents.find(st => st.id === studentId); const batchAtTimeOfPayment = s ? s.batch : "Unknown";
+            const studentId = document.getElementById('f-student').value;
+            if(!studentId) { showToast('Please select a student from the list!', 'warning'); return; }
+            const studentName = document.getElementById('f-student-search').value; 
+            let amt = parseInt(document.getElementById('f-amount').value) || 0; 
+            const mode = document.getElementById('f-mode').value;
+            
+            const s = liveStudents.find(st => st.id === studentId);
+            const batchAtTimeOfPayment = s ? s.batch : "Unknown";
+
+            // FULL MONTH LEAVE ACCOUNTING LOGIC
+            let amountToCredit = amt;
+            if (mode === 'Leave' && s) {
+                amountToCredit = s.monthlyFee; 
+                amt = 0; 
+            }
+
             try { 
-                await cloudDB.collection("students").doc(studentId).update({ totalPaid: firebase.firestore.FieldValue.increment(amt) }); 
+                await cloudDB.collection("students").doc(studentId).update({ totalPaid: firebase.firestore.FieldValue.increment(amountToCredit) }); 
                 await cloudDB.collection("fees").add({ studentId: studentId, name: studentName, amount: amt, mode: mode, batch: batchAtTimeOfPayment, date: new Date().toLocaleDateString(), timestamp: new Date().toISOString() }); 
-                closeModal('feeModal'); document.getElementById('feeForm').reset(); document.getElementById('f-student').value=''; document.getElementById('f-student-search').value=''; document.querySelectorAll('.quick-amt-chip').forEach(c => c.classList.remove('highlight')); showToast(`₹${amt} recorded via ${mode}!`); 
+                
+                closeModal('feeModal'); document.getElementById('feeForm').reset(); document.getElementById('f-student').value=''; document.getElementById('f-student-search').value=''; document.querySelectorAll('.quick-amt-chip').forEach(c => c.classList.remove('highlight')); document.getElementById('f-amount').disabled = false; document.querySelectorAll('.quick-amt-chip').forEach(c => c.style.opacity = '1');
+                
+                showToast(mode === 'Leave' ? `Leave recorded for ${studentName}!` : `₹${amt} recorded via ${mode}!`); 
             } catch (error) { showToast('Error processing fee.', 'error'); }
         }
 
@@ -1052,7 +1095,8 @@
 
         async function executeYearlyUpgrade() {
             if(confirm("Are you sure you want to upgrade all ACTIVE students to their next class?")) {
-                showToast("Upgrading... please wait.", "warning"); let batchPromises = [];
+                showToast("Upgrading... please wait.", "warning");
+                let batchPromises = [];
                 liveStudents.forEach((s) => {
                     if(s.batch !== "Alumni" && s.batch !== "Left") {
                         let currentClassNum = parseInt(s.batch.match(/\d+/));
@@ -1063,7 +1107,8 @@
                     await Promise.all(batchPromises);
                     const today = new Date(); let currentAcademicYear = today.getMonth() >= 3 ? today.getFullYear() : today.getFullYear() - 1;
                     localSettings.lastUpgradedYear = currentAcademicYear; localStorage.setItem('kb_settings', JSON.stringify(localSettings));
-                    document.getElementById('upgrade-banner-container').style.display = 'none'; showToast("All students upgraded!", "success");
+                    document.getElementById('upgrade-banner-container').style.display = 'none';
+                    showToast("All students upgraded!", "success");
                 } catch(e) { showToast("Error upgrading students", "error"); }
             }
         }
@@ -1079,9 +1124,11 @@
         function listenToStudents() {
             cloudDB.collection("students").onSnapshot((snapshot) => {
                 liveStudents = []; snapshot.forEach((doc) => { liveStudents.push({ id: doc.id, ...doc.data() }); });
-                studentsLoaded = true; renderStudentsUI(); 
+                studentsLoaded = true;
+                renderStudentsUI(); 
                 if(document.getElementById('feeModal').classList.contains('active')) populateFeeDropdown();
                 if(currentViewedStudentId) viewStudentProfile(currentViewedStudentId);
+                
                 if(feesLoaded) { updateDashboard(); renderFinancialsUI(); }
             });
         }
@@ -1116,9 +1163,13 @@
                     }
 
                     let balance = s.totalPaid - s.monthlyFee; let statusHtml = "";
-                    if (balance === 0) { statusHtml = `<span class="badge" style="background:rgba(16, 185, 129, 0.1); color:var(--success);"><span class="status-dot dot-success"></span> Paid</span>`; } 
-                    else if (balance < 0) { statusHtml = `<span class="badge" style="background:rgba(244, 63, 94, 0.1); color:var(--danger);"><span class="status-dot dot-danger"></span> Due: ₹${Math.abs(balance)}</span>`; } 
-                    else { statusHtml = `<span class="badge" style="background:rgba(67, 56, 202, 0.1); color:var(--primary);"><span class="status-dot dot-primary"></span> Adv: ₹${balance}</span>`; }
+                    if (balance === 0) { 
+                        statusHtml = `<span class="badge" style="background:rgba(16, 185, 129, 0.1); color:var(--success);"><span class="status-dot dot-success"></span> Paid</span>`; 
+                    } else if (balance < 0) { 
+                        statusHtml = `<span class="badge" style="background:rgba(244, 63, 94, 0.1); color:var(--danger);"><span class="status-dot dot-danger"></span> Due: ₹${Math.abs(balance)}</span>`; 
+                    } else { 
+                        statusHtml = `<span class="badge" style="background:rgba(67, 56, 202, 0.1); color:var(--primary);"><span class="status-dot dot-primary"></span> Adv: ₹${balance}</span>`; 
+                    }
                     
                     let initial = s.name.charAt(0).toUpperCase();
 
@@ -1140,6 +1191,7 @@
             }
             document.getElementById('studentTableBody').innerHTML = activeHtml;
 
+            // PAST DIRECTORY
             let pastList = liveStudents.filter(s => s.batch === "Alumni" || s.batch === "Left");
             let alumniCount = 0; let leftCount = 0; let lifetimeValue = 0;
             if(searchTermPast) { pastList = pastList.filter(s => s.name.toLowerCase().includes(searchTermPast) || s.phone.includes(searchTermPast)); }
@@ -1189,7 +1241,7 @@
 
             let studentFees = liveFees.filter(f => f.studentId === studentId); let feeHtml = studentFees.length === 0 ? `<tr><td colspan="4" style="text-align:center; padding: 20px; border:none;">No fees found.</td></tr>` : '';
             studentFees.forEach(f => { 
-                let icon = f.mode === 'UPI' ? 'mobile-screen' : (f.mode === 'Bank Transfer' ? 'building-columns' : 'money-bill'); 
+                let icon = f.mode === 'UPI' ? 'mobile-screen' : (f.mode === 'Bank Transfer' ? 'building-columns' : (f.mode === 'Leave' ? 'calendar-xmark' : 'money-bill')); 
                 feeHtml += `<tr class="standard-table"><td>${f.date}</td><td style="color: var(--success); font-weight: 800;">+₹${f.amount}</td><td><span class="badge" style="background:var(--surface-muted); border: 1px solid var(--border); color:var(--text-main);"><i class="fa-solid fa-${icon}"></i> ${f.mode || 'Cash'}</span></td><td><button class="btn btn-outline" style="padding: 6px 12px; width: auto; color: var(--primary); border-color: var(--primary);" onclick="downloadReceipt('${f.id}')"><i class="fa-solid fa-file-invoice"></i></button></td></tr>`; 
             });
             document.getElementById('sp-feesBody').innerHTML = feeHtml;
@@ -1227,7 +1279,10 @@
             
             liveFees.forEach(f => {
                 monthRev += f.amount; if(f.date === todayStr) todayRev += f.amount;
-                if(f.mode === 'Cash') cashTot += f.amount; else if(f.mode === 'UPI') upiTot += f.amount; else if(f.mode === 'Bank Transfer') bankTot += f.amount; else cashTot += f.amount;
+                if(f.mode === 'Cash') cashTot += f.amount; 
+                else if(f.mode === 'UPI') upiTot += f.amount; 
+                else if(f.mode === 'Bank Transfer') bankTot += f.amount; 
+                // "Leave" adds 0 to everything, so no action needed.
             });
             
             document.getElementById('dash-revenue').innerText = monthRev; 
@@ -1262,7 +1317,7 @@
             sortedKeys.forEach(key => {
                 html += `<tr class="group-header"><td colspan="5"><i class="fa-solid fa-layer-group" style="margin-right: 6px;"></i> ${key}</td></tr>`;
                 grouped[key].forEach(f => {
-                    let icon = f.mode === 'UPI' ? 'mobile-screen' : (f.mode === 'Bank Transfer' ? 'building-columns' : 'money-bill');
+                    let icon = f.mode === 'UPI' ? 'mobile-screen' : (f.mode === 'Bank Transfer' ? 'building-columns' : (f.mode === 'Leave' ? 'calendar-xmark' : 'money-bill'));
                     html += `<tr class="clickable-row">
                         <td style="color: var(--text-muted); font-size: 13px;">${f.date}</td>
                         <td style="color: var(--text-main); font-weight: 700;">${f.name}</td>
@@ -1382,7 +1437,7 @@
                 filteredFees.forEach(f => { 
                     rev += f.amount; 
                     if(f.mode === 'Cash') cashTot += f.amount; else if(f.mode === 'UPI') upiTot += f.amount; else if(f.mode === 'Bank Transfer') bankTot += f.amount; else cashTot += f.amount;
-                    let icon = f.mode === 'UPI' ? 'mobile-screen' : (f.mode === 'Bank Transfer' ? 'building-columns' : 'money-bill'); 
+                    let icon = f.mode === 'UPI' ? 'mobile-screen' : (f.mode === 'Bank Transfer' ? 'building-columns' : (f.mode === 'Leave' ? 'calendar-xmark' : 'money-bill')); 
                     feeHtml += `<tr class="standard-table"><td>${f.date}</td><td style="font-weight: 700; color: var(--text-main);">${f.name}</td><td style="color: var(--success); font-weight: 800;">+₹${f.amount}</td><td><span class="badge" style="background:var(--surface-muted); border: 1px solid var(--border); color:var(--text-main);"><i class="fa-solid fa-${icon}"></i> ${f.mode || 'Cash'}</span></td><td><button class="btn btn-outline" style="padding: 6px 12px; width: auto; color: var(--primary); border-color: var(--primary);" onclick="downloadReceipt('${f.id}')"><i class="fa-solid fa-file-invoice"></i></button></td></tr>`; 
                 });
             } else { feeHtml = `<tr><td colspan="5" style="text-align:center; padding: 40px 20px; border:none; color: var(--text-muted);"><i class="fa-solid fa-receipt" style="font-size: 32px; opacity: 0.5; margin-bottom: 10px; display: block;"></i>No fees collected for ${displayBatch}.</td></tr>`; }
@@ -1477,13 +1532,13 @@
             doc.setTextColor(16, 185, 129);
             doc.setFontSize(14);
             doc.setFont("helvetica", "bold");
-            doc.text("PAID", 176, 68, { align: "center" });
+            doc.text(fee.mode === 'Leave' ? "LEAVE" : "PAID", 176, 68, { align: "center" });
 
             doc.autoTable({
                 startY: 90,
                 head: [['Description', 'Payment Mode', 'Amount']],
                 body: [
-                    ['Tuition Fee', fee.mode || 'Cash', `Rs. ${fee.amount}.00`]
+                    [fee.mode === 'Leave' ? 'Full Month Leave Waiver' : 'Tuition Fee', fee.mode || 'Cash', `Rs. ${fee.amount}.00`]
                 ],
                 theme: 'grid',
                 headStyles: { fillColor: primary, textColor: [255,255,255], fontStyle: 'bold', fontSize: 11 },
